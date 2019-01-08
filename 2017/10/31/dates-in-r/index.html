@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.53" />
+
+
+<title>Dates in R - Blog_Name</title>
+<meta property="og:title" content="Dates in R - Blog_Name">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/bmjoseph">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">21 min read</span>
+    
+
+    <h1 class="article-title">Dates in R</h1>
+
+    
+    <span class="article-date">2017/10/31</span>
+    
+
+    <div class="article-content">
+      
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction-and-motivation">Introduction and Motivation</a></li>
+<li><a href="#converting-to-objects-of-class-date">Converting to Objects of Class “Date”</a><ul>
+<li><a href="#lubridate">Lubridate</a><ul>
+<li><a href="#inconvenient-or-uncommon-cases">Inconvenient or Uncommon Cases</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#operations-with-dates">Operations with Dates</a></li>
+<li><a href="#using-dates-to-manipulate-datasets">Using Dates to Manipulate Datasets</a><ul>
+<li><a href="#tracking-values-with-respect-to-time">Tracking Values with Respect to Time</a></li>
+<li><a href="#linear-regression-using-time-data">Linear Regression Using Time Data</a></li>
+</ul></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#references">References:</a></li>
+</ul>
+</div>
+
+<pre class="r"><code>## You&#39;ll need to have the following packages installed and loaded:
+library(lubridate) # For dealing with dates
+library(ggplot2) # For creating visuals and plots
+library(dplyr) # For working with the data
+library(readr) # For importing csv data files</code></pre>
+<div id="introduction-and-motivation" class="section level1">
+<h1>Introduction and Motivation</h1>
+<p>We have many ways of writing down and understanding dates in English. I’m sure you know what I mean when I say this draft is being written on October 24th 2017 and that I hope to be finished on 2017-10-31 at 11:59 PM. If I asked you how long I have to finish, you could mentally <em>subtract</em> those two dates. This is no problem even though I wrote them in different formats and they’re not even really numbers. It’s more complicated to do this operation in R because R has no idea how to subtract characters.</p>
+<p>We want R to “understand” that a character string representing a date is a particular type of object that can be manipulated with the same methods that humans use, but much faster. This will allow us to greatly expand the scope of the analysis that we can do because we’re able to look at changes over time. For example, we could take data from a business and determine which times of the day and which day of the week is the most popular for shopping. We could take data from the NBA and figure out which top players start to produce more as the season progresses.</p>
+<p>This post will explain how to turn a column of character values (with a variety of starting formats) into dates and then give some interesting examples of what we can actually do with these date objects.</p>
+</div>
+<div id="converting-to-objects-of-class-date" class="section level1">
+<h1>Converting to Objects of Class “Date”</h1>
+<p>R’s large user base allows us to do a most tasks in multiple different ways. Converting to dates is no different, and we have the choice to use base R or any of a variety of packages. I’ll be mostly focusing on the “lubridate” package, but feel free to explore other options if you’re so inclined. The Berkeley Stats department has a great <a href="https://www.stat.berkeley.edu/~s133/dates.html">guide</a> on how to do many of these same processes using base R. However, in my opinion, lubridate is more intuitive and far easier to use than the base R alternative.</p>
+<p>During your time as a data analyst, you’ll surely encounter dates in many formats, some much nicer than others. For reference, if you’re ever collecting data, it’s <a href="http://kbroman.org/dataorg/">recommended</a> that you input them in a YYYY-MM-DD format to make your life (and the lives of anyone else who might analyze your data) easier.</p>
+<p>The first step in importing dates, just like with most data analysis, is to take a look at your data. Figure out the ordering of the parts of the dates – are they written year month day (2017-10-24), month day year (10-24-2017), or something else? Don’t worry about the delimiting character (- and / are common ones, but lubridate is smart enough to figure it out in most reasonable cases) or the way the month is described. Lubridate with handle full month names, abbreviated month names, or the number of the month with no issues.</p>
+<p>Be careful about ambiguous formats, such as 08-09-2017, where you can’t distinguish between the month and the day. In this case, you can look deeper into your list of dates and see if you can find one that’s more clear or examine any information presented with the data in a data dictionary or on the source website to see there are any clues.</p>
+<p>Once you’ve figured this out, you’re ready to start importing your dates with lubridate. Let’s see how.</p>
+<div id="lubridate" class="section level2">
+<h2>Lubridate</h2>
+<p>Lubridate is a <a href="https://github.com/tidyverse/lubridate">package</a> written by Garrett Grolemund and Hadley Wickham which includes a series of functions used to change a character vector into a date. Order the abbreviations below according to the format in your character vector:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Abbreviation</th>
+<th>Object</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>y</td>
+<td>year</td>
+</tr>
+<tr class="even">
+<td>m</td>
+<td>month</td>
+</tr>
+<tr class="odd">
+<td>d</td>
+<td>day</td>
+</tr>
+</tbody>
+</table>
+<p>You should end up with a function of the form <code>ymd()</code>, which takes in a character vector.</p>
+<p>If you have information more specific than just the day, you can add an underscore and then abbreviations from the following chart:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Abbreviation</th>
+<th>Object</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>h</td>
+<td>hour</td>
+</tr>
+<tr class="even">
+<td>m</td>
+<td>minute</td>
+</tr>
+<tr class="odd">
+<td>s</td>
+<td>second</td>
+</tr>
+</tbody>
+</table>
+<p>In this case, you’ll end up with a function that looks something like <code>ymd_hms()</code>.</p>
+<p>Let’s try a straightforward example.</p>
+<pre class="r"><code>## Convert this character vector to date objects:  
+char_days &lt;- c(&quot;Oct 24 2017&quot;, &quot;Oct 25 2017&quot;, &quot;Oct 26 2017&quot;, &quot;Oct 27 2017&quot;,
+          &quot;Oct 28 2017&quot;, &quot;Oct 29 2017&quot;, &quot;Oct 30 2017&quot;)
+# First examine the structure -- it looks like we have month, day, year. 
+fixed_days &lt;- mdy(char_days) # mdy comes from the first chart above
+# Let&#39;s take a look at our new objects
+head(fixed_days, 3)</code></pre>
+<pre><code>## [1] &quot;2017-10-24&quot; &quot;2017-10-25&quot; &quot;2017-10-26&quot;</code></pre>
+<p>Here are a few important things to notice:</p>
+<ul>
+<li>The input had “Oct” for the month but the output has changed this to a 10.<br />
+</li>
+<li>The input was in a <code>mdy</code> format, but the output is in the recommended YYYY-MM-DD. This will happen with successful parsing <em>no matter</em> the format of the input.</li>
+</ul>
+<p>Let’s go through some more examples:</p>
+<pre class="r"><code>## Includes time information
+dates_with_times &lt;- c(&quot;October 25 2017 11:40PM&quot;, &quot;January 18 2017 3:45AM&quot;)
+# Here we have the same month, day, year format,
+# but we also have the hour and the minute.
+fixed_dates_with_times &lt;- mdy_hm(dates_with_times)
+fixed_dates_with_times</code></pre>
+<pre><code>## [1] &quot;2017-10-25 23:40:00 UTC&quot; &quot;2017-01-18 03:45:00 UTC&quot;</code></pre>
+<p>Now we have “UTC” added to the end of our dates. That’s an abbreviation for the time zone lubridate chooses by default. We didn’t have this before because days of the year don’t depend on time zones directly. We can change the output to specify our own time zone with the optional <code>tz</code> argument inside any of the lubridate functions. According to the <a href="https://cran.r-project.org/web/packages/lubridate/lubridate.pdf">cran documentation</a> of lubridate, the <code>tz</code> argument uses information in your computer becuase R has no internal list of time zones. You can find a full list of commonly accepted time zone arguments at <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">this Wikipedia page</a>.</p>
+<p>Let’s update the dates we just made to specify that I’m on the US West Coast. As far as I can tell, there is no time zone that specifically mentions San Francisco, so I’ll use “America/Los_Angeles.” To check the time zone setting for your current computer, you can use the base R function <code>sys.timezone()</code>.</p>
+<pre class="r"><code># Adding the correct time zone:
+fixed_time_zones &lt;- mdy_hm(dates_with_times, tz = &quot;America/Los_Angeles&quot;)
+fixed_time_zones</code></pre>
+<pre><code>## [1] &quot;2017-10-25 23:40:00 PDT&quot; &quot;2017-01-18 03:45:00 PST&quot;</code></pre>
+<p>Lubridate was even smart enough to distinguish that one of the dates was during daylight savings!</p>
+<div id="inconvenient-or-uncommon-cases" class="section level3">
+<h3>Inconvenient or Uncommon Cases</h3>
+<p>Okay, so we’ve learned enough to handle most common cases. Up until now, the data has been in a convenient format, but what if your dataset has some digit information left off? For example, let’s examine what lubridate does if the years are in a two digit ambiguous format:</p>
+<pre class="r"><code>## Ambiguous years
+dates_without_digits &lt;- c(&quot;13/12/89&quot;, &quot;9/5/17&quot;, &quot;30/10/68&quot;, &quot;21/3/69&quot;)
+# Here we can tell that we have day, month, year, 
+# but we&#39;ve left off some information (century and 0s from months and days) 
+fixed_dates_without_digits &lt;- dmy(dates_without_digits)
+fixed_dates_without_digits</code></pre>
+<pre><code>## [1] &quot;1989-12-13&quot; &quot;2017-05-09&quot; &quot;2068-10-30&quot; &quot;1969-03-21&quot;</code></pre>
+<p>The results may be surprising – two digit years less than or equal to 68 are parsed as being from the 21st century, while numbers 69 or larger are parsed as being from the 20th century. This is a quirk of lubridate, and honestly I don’t agree with that default. In my opinion it’s more likely that you’ll be looking at time data from the mid 20th century than data from the future. Hopefully your datasets will be more well behaved, but if you do need to load 20th century data with two digit years, check out <a href="https://stackoverflow.com/questions/12323693/is-there-a-more-elegant-way-to-convert-two-digit-years-to-four-digit-years-with">this stack overflow page</a> for a well written solution.</p>
+<p>The last important case is when you have a group of dates in different formats. This will commonly come up if you’ve merged together datasets prepared by different people. Lubridate has a function <code>parse_date_time()</code> which allows you to handle this with the argument <code>orders</code>. The <code>orders</code> argument takes in a <em>character vector</em> where each element is one of the usual lubridate functions such as “ymd”. Lubridate will use the first element of <code>orders</code> to parse the first element of your date vector. This will continue through the length of the two vectors.</p>
+<p>The easiest way to show this is with an example:</p>
+<pre class="r"><code># Two datasets with different formats
+format_1 &lt;- c(&quot;9/4/98&quot;, &quot;10/28/97&quot;, &quot;12/26/95&quot;) #mdy format
+format_2 &lt;- c(&quot;17/3/98&quot;, &quot;12/7/97&quot;) #dmy format
+# Combine the vectors into one longer vector
+mixed_formats &lt;- c(format_1, format_2)
+# Use the parse_date_time function:
+not_mixed &lt;- parse_date_time(mixed_formats, # Use the combined dates
+              orders = 
+                c(rep(&quot;mdy&quot;, length(format_1)), # Uses mdy for first vector&#39;s elements
+                rep(&quot;dmy&quot;, length(format_2))), # Uses dmy for second vector&#39;s elements
+              tz = &quot;America/Los_Angeles&quot;)
+                            
+not_mixed</code></pre>
+<pre><code>## [1] &quot;1998-09-04 PDT&quot; &quot;1997-10-28 PST&quot; &quot;1995-12-26 PST&quot; &quot;1998-03-17 PST&quot;
+## [5] &quot;1997-12-07 PST&quot;</code></pre>
+<p>One final note for importing dates is that lubridate has no <code>md()</code> function to use when your dates have no year information at all. If this happens, <a href="https://stackoverflow.com/questions/41173724/how-can-i-read-dates-without-year-using-readr">here’s a stack overflow question</a> which explains how you can use <code>parse_date_time</code> to force the parsing anyway:</p>
+<pre class="r"><code>solstices &lt;- c(&quot;3/20&quot;, &quot;6/21&quot;, &quot;9/23&quot;, &quot;12/21&quot;) # month day format for season solstices
+solstices &lt;- parse_date_time(solstices, orders = &quot;%m-%d&quot;) # changes to date format
+solstices</code></pre>
+<pre><code>## [1] &quot;0000-03-20 UTC&quot; &quot;0000-06-21 UTC&quot; &quot;0000-09-23 UTC&quot; &quot;0000-12-21 UTC&quot;</code></pre>
+<p>I won’t get into the details of the syntax because it’s unintuitive and models after the base R way to import dates. This is a degenerate case – dates need a year to be complete. This is why you can see lubridate added a default “missing value” of 0000 to each date, so do be careful with calculations. If you’re given data with no years, I recommend doing some data preprocessing to add the correct years.</p>
+<p>Armed with lubridate, you should now be able to coerce characters to dates. But what next? I’ll show you how you can perform a variety of operations on dates to get useful results.</p>
+</div>
+</div>
+</div>
+<div id="operations-with-dates" class="section level1">
+<h1>Operations with Dates</h1>
+<p>Functions that normally work on numbers work on dates now! Suppose my two best friends and I want to share a joint birthday celebration at the average of our three birthdays. I could probably figure this out on paper, but it will be faster this way:</p>
+<pre class="r"><code># Import our birthdays using lubridate
+birthdays &lt;- mdy(c(&quot;10/15/1997&quot;, &quot;10/28/1997&quot;, &quot;12/26/1997&quot;))
+# Use the base R mean() function to get the average
+party &lt;- mean(birthdays)
+party # This is still an object of class date!</code></pre>
+<pre><code>## [1] &quot;1997-11-12&quot;</code></pre>
+<p>We’re obviously not going to go back in time to 1997 celebrate, so let’s extract only the month and day from this average using the lubridate functions <code>day()</code> and <code>month()</code>. When we use month, the default output will be the month’s number (from 1 to 12), but we can specify a more human readable version by using the optional argument <code>label = TRUE</code>. This will change the output to an ordered factor with abbreviations for the months of the year as levels.</p>
+<pre class="r"><code>party_month &lt;- month(party, label = TRUE)
+party_month</code></pre>
+<pre><code>## [1] Nov
+## 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</code></pre>
+<pre class="r"><code>party_day &lt;- day(party)
+party_day</code></pre>
+<pre><code>## [1] 12</code></pre>
+<p>It turns out that there are a lot of things we can extract! Try out the following functions:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Function Name</th>
+<th>Output</th>
+<th>Class of Output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>second()</code></td>
+<td>Second (defaults to 0)</td>
+<td>Numeric</td>
+</tr>
+<tr class="even">
+<td><code>minute()</code></td>
+<td>Minute (defaults to 0)</td>
+<td>Numeric</td>
+</tr>
+<tr class="odd">
+<td><code>hour()</code></td>
+<td>Hour (defaults to 0)</td>
+<td>Numeric</td>
+</tr>
+<tr class="even">
+<td><code>day()</code></td>
+<td>Day of month (1 through 31)</td>
+<td>Numeric</td>
+</tr>
+<tr class="odd">
+<td><code>wday()</code></td>
+<td>Day of week (1 through 7)</td>
+<td>Numeric</td>
+</tr>
+<tr class="even">
+<td><code>yday()</code></td>
+<td>Day of year (1 through 365</td>
+<td>Numeric</td>
+</tr>
+<tr class="odd">
+<td><code>week()</code></td>
+<td>Week of year (1 through 53)</td>
+<td>Numeric</td>
+</tr>
+<tr class="even">
+<td><code>month()</code></td>
+<td>Month (1 through 12)</td>
+<td>Numeric</td>
+</tr>
+<tr class="odd">
+<td><code>year()</code></td>
+<td>Year</td>
+<td>Numeric</td>
+</tr>
+<tr class="even">
+<td><code>tz()</code></td>
+<td>Time zone abbreviation</td>
+<td>Character</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> The <code>wday()</code> function also has the optional <code>label = TRUE</code> argument.</p>
+</div>
+<div id="using-dates-to-manipulate-datasets" class="section level1">
+<h1>Using Dates to Manipulate Datasets</h1>
+<p>Let’s put these functions to use on a real dataset. The following data comes from the <a href="https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&amp;DB_Short_Name=On-Time">Bureau of Transportation</a> and has information about the date and delays of many US flights. First let’s load the data:</p>
+<pre class="r"><code># Import using readr
+flights &lt;- read_csv(&quot;../../static/data/flight_delays.csv&quot;, col_types = c(&quot;cnnnnnnn&quot;))
+# Let&#39;s examine a slice of 5 rows uniformly distributed through the data
+slice(flights, seq(1, length(flights$FL_DATE), length(flights$FL_DATE)/5)) </code></pre>
+<pre><code>## # A tibble: 5 x 8
+##      FL_DATE CRS_DEP_TIME DEP_TIME DEP_DELAY_NEW CRS_ARR_TIME ARR_TIME
+##        &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;
+## 1 2016-11-01         1640     1644             4         1827     1830
+## 2 2016-11-07          725      726             1         1050      958
+## 3 2016-11-13         2035     2029             0         2223     2201
+## 4 2016-11-18         1000     1002             2         1300     1246
+## 5 2016-11-25          930      926             0         1200     1146
+## # ... with 2 more variables: ARR_DELAY &lt;dbl&gt;, DISTANCE &lt;dbl&gt;</code></pre>
+<p>Taking a look at the data we’ve just loaded, we see that FL_DATE tells us the day of the flight as a character in <code>ymd</code>, and the scheduled departure hour and minute information is in CRS_DEP_TIME column as a number. Unfortunately, the time zone information isn’t present, so I’ll choose to leave it as the default: UTC. The source website mentions that all times are correct in their local time zone, so we don’t have to worry about any skewing. Let’s convert the day into a date object and then use the <code>hour()</code> and <code>minute()</code> functions to actually set the hour and minute information into the date:</p>
+<pre class="r"><code># Convert to date
+flights$FL_DATE &lt;- ymd(flights$FL_DATE)
+# Extract the hour number from CRS_DEP_TIME
+flight_hour &lt;- flights$CRS_DEP_TIME %/% 100 # floor division operator
+# Extract the minute number from CRS_DEP_TIME
+flight_minute &lt;- flights$CRS_DEP_TIME %% 100 # mod division operator
+# Add in the hour information 
+hour(flights$FL_DATE) &lt;- flight_hour
+# Add in the minute information
+minute(flights$FL_DATE) &lt;- flight_minute
+head(flights$FL_DATE)</code></pre>
+<pre><code>## [1] &quot;2016-11-01 16:40:00 UTC&quot; &quot;2016-11-01 16:50:00 UTC&quot;
+## [3] &quot;2016-11-01 11:35:00 UTC&quot; &quot;2016-11-01 10:25:00 UTC&quot;
+## [5] &quot;2016-11-01 15:55:00 UTC&quot; &quot;2016-11-01 08:06:00 UTC&quot;</code></pre>
+<p><strong>Caution:</strong> Much of the rest of this post requires a basic understanding of how to use ggplot2 and dplyr, so feel free to reference guides for <a href="http://r-statistics.co/ggplot2-Tutorial-With-R.html">ggplot2</a> and <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html">dplyr</a> if you need a refresher or if any step is confusing. Also, unfortunately, dates with times don’t play very nicely with dplyr. Throughout this analysis, you’ll see me move individually needed date components to other columns and then select off the full date/time column when I use the dplyr function <code>group_by()</code>.</p>
+<div id="tracking-values-with-respect-to-time" class="section level3">
+<h3>Tracking Values with Respect to Time</h3>
+<p>To make sure that our dates are working as they should, I’ll graph a simple plot of delays versus time. In general, I recommend putting time on the x axis so that it’s easy to see change over time.</p>
+<pre class="r"><code>gg_delay &lt;- (ggplot(flights, aes(x = FL_DATE, y = DEP_DELAY_NEW)) + 
+               geom_point(alpha = .01, color = &quot;blue&quot;) + 
+               ylim(0, 300) + # Some points have y &gt; 300, ggplot gives us a warning
+               ggtitle(&quot;Scatterplot of Departure Time vs Delay&quot;) +
+               labs(x = &quot;Departure Date&quot;, y = &quot;Delay (minutes)&quot;))
+gg_delay</code></pre>
+<pre><code>## Warning: Removed 1938 rows containing missing values (geom_point).</code></pre>
+<p><img src="/post/2017-10-31-dates-in-r_files/figure-html/full%20scatterplot%20of%20departure%20time%20vs%20delay-1.png" width="672" /></p>
+<p>This graph shows us that delays tend to spike during the middle of the day. It might be visually misleading because of the sheer number of points on the graph. To combat this, I chose to make each point very light to distinguish between what delay lengths are likely instead of just showing the range of possible values. Also, I restricted the scale to have a max of 5 hours, thinking that everything else is an outlier/rescheduled flight and including them would only take away from our ability to see the overall trend. It appears that delays spike during the middle of the day – flights early in the morning and late at night seem to be more likely to get off on time. There doesn’t seem to be much difference throughout the month, except that there were fewer flights right around Thanksgiving, which was on November 24th.</p>
+<p>Let’s see if we can confirm that delays are higher in the middle of the day. Start by adding a column <code>period</code> which specifies early (times earlier than noon), middle (times between noon and 8:00 PM), or late (times after 8:00 PM). Note these time intervals aren’t equal in length. I chose them to reflect what I’d view as being in the beginning, middle, or end of the day. <em>If this seems too arbitrary for you</em>, simply pay attention to the process. You can use a similar process to add a categorical variable based on time intervals to a dataset of your choosing.</p>
+<pre class="r"><code>part_of_day &lt;- function(dates) {
+  period &lt;- rep(NA, length(dates)) # Initialize and dummy vector
+  for (i in 1:length(dates)) {
+    if (hour(dates[i]) &lt;= 11) { # Includes up to 11:59 AM
+      period[i] &lt;- &quot;early&quot;
+    } else if (hour(dates[i]) &gt;= 12 &amp; hour(dates[i]) &lt;= 19) { # 12:00 PM to 7:59 PM 
+      period[i] &lt;- &quot;middle&quot;
+    } else { # 8:00 PM to Midnight
+      period[i] &lt;- &quot;late&quot;
+    }
+  }
+  return(period)
+}
+flights$period &lt;- part_of_day(flights$FL_DATE)
+head(flights$period, 5)</code></pre>
+<pre><code>## [1] &quot;middle&quot; &quot;middle&quot; &quot;early&quot;  &quot;early&quot;  &quot;middle&quot;</code></pre>
+<p>Using this new information, let’s make a new plot that distinguishes between these categories. You can use the <code>facet_wrap</code> layer of ggplot to accomplish this by faceting by period.</p>
+<pre class="r"><code># Change the period to a factor to control the displayed order 
+flights$period &lt;- factor(flights$period, levels=c(&quot;early&quot;, &quot;middle&quot;, &quot;late&quot;))
+# Same graph as before but facet wrapped by period
+delay_by_period &lt;- (ggplot(flights, aes(x = FL_DATE, y = DEP_DELAY_NEW)) + 
+               geom_point(alpha = .01, color = &quot;blue&quot;) + 
+               facet_wrap(~ period) +
+               ylim(0, 300) + 
+               ggtitle(&quot;Departure Time vs Delay (by Time of Day)&quot;) +
+               labs(x = &quot;Departure Date&quot;, y = &quot;Delay (minutes)&quot;))
+delay_by_period</code></pre>
+<pre><code>## Warning: Removed 1938 rows containing missing values (geom_point).</code></pre>
+<p><img src="/post/2017-10-31-dates-in-r_files/figure-html/faceted%20scatterplots%20of%20delay-1.png" width="672" /></p>
+<p>It does seem that the delays in the middle of the day tend to be larger. Certainly there are more long delays in the middle of the day, but we still can’t tell for sure if this is due to there being more total flights in the early and late parts of the day, so lets control for this by finding and graphing the average delay using dplyr and ggplot2.</p>
+<pre class="r"><code># Use dplyr to compute the summary statistic for mean delay
+ave_del_by_period &lt;- summarise(group_by(flights[ , 2:ncol(flights)], period),
+                                      ave_delay = mean(DEP_DELAY_NEW, na.rm = TRUE))
+# Use ggplot to produce and display the plot
+del_by_period_bar &lt;- (ggplot(ave_del_by_period, aes(x = period, y = ave_delay)) +
+                        geom_bar(stat = &quot;identity&quot;, fill = &quot;blue&quot;, alpha = .75) +
+                        ggtitle(&quot;Average Flight Delay by Part of Day&quot;) +
+                        labs(x = &quot;Part of Day&quot;, y = &quot;Average Delay in Minutes&quot;))
+del_by_period_bar</code></pre>
+<p><img src="/post/2017-10-31-dates-in-r_files/figure-html/summary%20statistic%20for%20delay%20by%20part%20of%20day-1.png" width="672" /></p>
+<p>It’s true – average delay really is highest during the middle of the day, but not by as much as it appeared in the earlier graph. This is probably because there are more flights in the afternoon, so more points appear visible. It turns out that the middle and end of the day are pretty similar, but delays are low in the morning. Perhaps the airlines simply haven’t had the chance to fall behind schedule yet.</p>
+<p>I’ll test this and remove the somewhat arbitrary choice of period of day by splitting the dataset into each of the 24 hours. Now that we know a simple scatterplot can be misleading, let’s skip that part and go straight to the summary statistics barplot.</p>
+<pre class="r"><code>## The first step is to add a column that captures the hour of the day
+flights$hour_of_day &lt;- hour(flights$FL_DATE) 
+
+## Use group_by and summarize operations to compute summary statistics
+ave_del_by_hour &lt;- summarise(group_by(flights[ , 2:ncol(flights)], hour_of_day),
+                                      ave_delay = mean(DEP_DELAY_NEW, na.rm = TRUE))
+
+## use ggplot to produce a plot, as before
+del_by_hour_bar &lt;- (ggplot(ave_del_by_hour, aes(x = hour_of_day, y = ave_delay)) +
+                        geom_bar(stat = &quot;identity&quot;, fill = &quot;blue&quot;, alpha = .75) +
+                        ggtitle(&quot;Average Flight Delay by Hour of Day&quot;) +
+                        labs(x = &quot;Hour&quot;, y = &quot;Average Delay in Minutes&quot;))
+del_by_hour_bar</code></pre>
+<p><img src="/post/2017-10-31-dates-in-r_files/figure-html/barplot%20of%20flight%20delay%20by%20hour-1.png" width="672" /></p>
+<p>The result is very interesting. Outside of outliers at 2 and 4 am, the average delays build throughout the day until they reach their max around 6 PM, then gradually decline again. Flights that are very early or very late do tend to have the lowest average delays, and the “best” choice for avoiding a delay is around 5 AM.</p>
+<p>Okay, so early in the morning is the delay minimizing choice. Personally, I hate early flights, so let’s see if there’s an easier way to minimize delay by repeating our analysis for days of the week.</p>
+<pre class="r"><code>## The first step is to add a column that captures the day of the week.
+# Use label = TRUE to automatically convert to a descriptive factor
+flights$day_of_week &lt;- wday(flights$FL_DATE, label = TRUE) 
+
+## Use group_by and summarize operations to compute summary statistics
+ave_del_by_day &lt;- summarise(group_by(flights[ , 2:ncol(flights)], day_of_week),
+                                      ave_delay = mean(DEP_DELAY_NEW, na.rm = TRUE))
+## use ggplot to produce a plot, as before
+del_by_wday_bar &lt;- (ggplot(ave_del_by_day, aes(x = day_of_week, y = ave_delay)) +
+                        geom_bar(stat = &quot;identity&quot;, fill = &quot;blue&quot;, alpha = .75) +
+                        ggtitle(&quot;Average Flight Delay by Day of Week&quot;) +
+                        labs(x = &quot;Day of Week&quot;, y = &quot;Average Delay in Minutes&quot;))
+del_by_wday_bar</code></pre>
+<p><img src="/post/2017-10-31-dates-in-r_files/figure-html/flight%20delay%20by%20day%20of%20week-1.png" width="672" /></p>
+<p>There is less variation in delay across days of the week, but it looks like the most popular flying days (Friday, Sunday, and Monday) are the most delay prone. Saturday flights have the least delay, possibly because most people taking voluntary trips leave Friday, stay on Saturday, and then return on Sunday or Monday. This is conjecture of course – to prove a relationship between number of flights and average delay we would need to make a scatterplot of average number of flights per day (or hour) and delay and compute a test statistic.</p>
+</div>
+<div id="linear-regression-using-time-data" class="section level3">
+<h3>Linear Regression Using Time Data</h3>
+<p>Let’s see if the times with the longest delays are also the times with the most flights. To do this, start by using the dplyr function <code>count()</code> on the flight data, to count the number of flights by the hour of the day.</p>
+<pre class="r"><code>counts_by_hour &lt;- count(flights[ , 2:ncol(flights)], hour_of_day)
+head(counts_by_hour, 3)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   hour_of_day     n
+##         &lt;int&gt; &lt;int&gt;
+## 1           0  1178
+## 2           1   392
+## 3           2   109</code></pre>
+<p>Next, add the count column (which is called <code>n</code> by default) onto the data frame we already made with average delay by hour and then create a scatterplot of the delay against the count (using the hour of the day as a label).</p>
+<pre class="r"><code># Add count column
+ave_del_by_hour$count &lt;- counts_by_hour$n
+head(ave_del_by_hour, 3)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   hour_of_day ave_delay count
+##         &lt;int&gt;     &lt;dbl&gt; &lt;int&gt;
+## 1           0  6.679422  1178
+## 2           1  5.280612   392
+## 3           2 10.898148   109</code></pre>
+<pre class="r"><code># Make the scatterplot
+delay_vs_count &lt;- (ggplot(ave_del_by_hour, aes(x = count, y = ave_delay)) +
+                     geom_point() +
+                     geom_label(aes(label = hour_of_day), alpha = .75,
+                                nudge_x = 500, nudge_y = .25) +
+                     geom_smooth(method = lm) + 
+                     ggtitle(&quot;Scatterplot of Average Delay Versus Flights per Hour&quot;,
+                             subtitle = &quot;Labelled by Hour of Day&quot;) +
+                     labs(x = &quot;Total Number of Flights&quot;,
+                          y = &quot;Average Delay in Minutes&quot;))
+delay_vs_count</code></pre>
+<p><img src="/post/2017-10-31-dates-in-r_files/figure-html/scatterplot%20of%20count%20vs%20delay-1.png" width="672" /></p>
+<p>The first thing to notice when looking at this graph is that there are very few flights at the very end or very beginning of the day. The bottom 5 hours in terms of quantity are in a continuous range from 11:00 PM to 4:59 AM. The bottom 8 hours are from 9:00 PM to 5:59 AM. These 8 hours seem pretty far offset from the rest of the data. In any case, there is no obvious pattern that comes out of this graph. It seems that quantity of flights is not driving the delays. Just to make sure, let’s calculate the correlation coefficient:</p>
+<pre class="r"><code>cor(ave_del_by_hour$count, ave_del_by_hour$ave_delay)</code></pre>
+<pre><code>## [1] 0.1220106</code></pre>
+<p>The number of flights per hour and average flight delay have almost no linear correlation! Even though we haven’t found what we’re looking for, don’t be discouraged by negative results. This conclusion is still useful, and now we can move on to checking another possible cause. Perhaps, as we thought earlier, the airlines fall behind as the day progresses. Let’s remove the bottom 8 hours where there are less than half as many flights per hour on average and then check this by making a scatterplot of hour against delay.</p>
+<pre class="r"><code># Slice to get only the hours we want
+popular_times_with_delay &lt;- slice(ave_del_by_hour, 7:21) # 7th row is hour 6
+                                                         # 21st row is hour 20
+
+delay_vs_hour &lt;- (ggplot(popular_times_with_delay, aes(x = hour_of_day,
+                                                       y = ave_delay)) +
+            geom_point() +
+            geom_smooth(method = lm) + 
+            ggtitle(&quot;Scatterplot of Average Delay versus Hour of Day at Popular Times&quot;) +
+            labs(x = &quot;Hour of Day&quot;,
+                 y = &quot;Average Delay in Minutes&quot;))
+delay_vs_hour</code></pre>
+<p><img src="/post/2017-10-31-dates-in-r_files/figure-html/scatterplot%20of%20delay%20vs%20hour-1.png" width="672" /></p>
+<p>This looks much more correlated, and it is now clear delays do tend to increase as the day progresses. Of course, this only considers the 16 hours of the day with the most flights. As we can see in the count scatterplot, all of these hours are fairly close to each other in terms of number of flights, so in some way this controls for the busyness of the airport. The clear linear association visible in the scatterplot is confirmed by a much larger correlation coefficient:</p>
+<pre class="r"><code>cor(popular_times_with_delay$hour_of_day, popular_times_with_delay$ave_delay)</code></pre>
+<pre><code>## [1] 0.9803656</code></pre>
+<p>The next time a friend asks you what time to get to the airport, you’ll know that delays are about twice as long on average at the end of the day than at the beginning!</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>I hope you now see the power of being able to do analysis that depends on dates and times and feel that you have all the tools necessary to investigate the topics that interest you. Being able to visualize how things in the world change over time will allow you, as a statistician, to make more accurate predictions about the future.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References:</h1>
+<ul>
+<li><p>The referenced guide from the Berkeley Stats department about using base R to handle dates:<br />
+<a href="https://www.stat.berkeley.edu/~s133/dates.html" class="uri">https://www.stat.berkeley.edu/~s133/dates.html</a></p></li>
+<li><p>The referenced guide to formatting your datasets in a convenient format:<br />
+<a href="http://kbroman.org/dataorg/" class="uri">http://kbroman.org/dataorg/</a></p></li>
+<li><p>The referenced full lubridate package on github:<br />
+<a href="https://github.com/tidyverse/lubridate" class="uri">https://github.com/tidyverse/lubridate</a></p></li>
+<li><p>The referenced cran documentation for lubridate:<br />
+<a href="https://cran.r-project.org/web/packages/lubridate/lubridate.pdf" class="uri">https://cran.r-project.org/web/packages/lubridate/lubridate.pdf</a></p></li>
+<li><p>The referenced Wikipedia page including a list of time zones:<br />
+<a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" class="uri">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p></li>
+<li><p>The referenced stack overflow page about converting two digit years:<br />
+<a href="https://stackoverflow.com/questions/12323693/is-there-a-more-elegant-way-to-convert-two-digit-years-to-four-digit-years-with" class="uri">https://stackoverflow.com/questions/12323693/is-there-a-more-elegant-way-to-convert-two-digit-years-to-four-digit-years-with</a></p></li>
+<li><p>The referenced stack overflow page about reading dates without years:<br />
+<a href="https://stackoverflow.com/questions/41173724/how-can-i-read-dates-without-year-using-readr" class="uri">https://stackoverflow.com/questions/41173724/how-can-i-read-dates-without-year-using-readr</a></p></li>
+<li><p>The US Bureau of Transportation data website – the source of my flight data:<br />
+<a href="https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&amp;DB_Short_Name=On-Time" class="uri">https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&amp;DB_Short_Name=On-Time</a></p></li>
+<li><p>The referenced tutorial for ggplot2:<br />
+<a href="http://r-statistics.co/ggplot2-Tutorial-With-R.html" class="uri">http://r-statistics.co/ggplot2-Tutorial-With-R.html</a></p></li>
+<li><p>The referenced tutorial for dplyr:<br />
+<a href="https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html" class="uri">https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html</a></p></li>
+<li><p>A vignette I used to help me learn lubridate from the ground up:<br />
+<a href="https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html" class="uri">https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html</a></p></li>
+<li><p>A tutorial I used to help me understand how to import heterogeneous date formats:<br />
+<a href="https://skgrange.github.io/date_handling.html#heterogeneous_formats" class="uri">https://skgrange.github.io/date_handling.html#heterogeneous_formats</a></p></li>
+<li><p>A page I used to help me do floor and mod division in R:<br />
+<a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html" class="uri">https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html</a></p></li>
+<li><p>A page I used to help me order facets in ggplot2:<br />
+<a href="https://stackoverflow.com/questions/14262497/fixing-the-order-of-facets-in-ggplot" class="uri">https://stackoverflow.com/questions/14262497/fixing-the-order-of-facets-in-ggplot</a></p></li>
+<li><p>A page I used to understand the dplyr function <code>count()</code>:<br />
+<a href="https://rdrr.io/cran/dplyr/man/tally.html" class="uri">https://rdrr.io/cran/dplyr/man/tally.html</a></p></li>
+</ul>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
