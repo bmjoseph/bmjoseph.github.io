@@ -140,19 +140,9 @@ str(all_too_well)</code></pre>
 <p>The next step is to use rvest to extract only the components of the webpage that we’re actually interested in using the function <code>html_nodes()</code>. This is probably the most challenging part of the process, as it requires going to the website itself and identifying the HTML tags that describe the part we’re interested in.</p>
 <p>If you’re using Google Chrome on a Mac, go to the website and push option command i to automatically open up information about the HTML structure of whatever website you’re on. Chrome on a PC isn’t much different – just use the control key instead of the command key. If you’re on Safari, follow the steps <a href="http://www.socialmeteor.com/2013/03/04/how-to-view-html-source-in-safari-web-browser/">here</a>. If you have a different browser, follow the steps on <a href="https://www.computerhope.com/issues/ch000746.htm">this site</a>.</p>
 <p>With that said, I do highly recommend using Google Chrome. Chrome will make the following steps much easier. If you’re following along and using Google Chrome, you should see something like this:</p>
-<p><br></p>
-<div class="figure">
-<img src="/images/web_scrape_guide/img1.png" />
-
-</div>
-<p><br></p>
+<p><img src="/images/web_scrape_guide/img1.png" width="80%" /></p>
 <p>Take special notice of the part that I added a red circle to in upper center part of the picture. That’s a selector tool which will allow you to find your desired HTML tags without first becoming an HTML coding wizard. Click on that tool and then interactively move your cursor around the left part of the screen (without clicking) until the text you want is highlighted. Click once and notice the change on the right hand side. If you do this step correctly and highlight only the lyrics, you should see this line highlighted on the right side of the page:</p>
-<p><br></p>
-<div class="figure">
-<img src="/images/web_scrape_guide/highlighted_tag.png" />
-
-</div>
-<p><br></p>
+<p><img src="/images/web_scrape_guide/highlighted_tag.png" width="80%" /></p>
 <p>The text is partitioned off in a <code>&lt;div&gt;</code> tag, which means it’s divided from other parts. Looking at the lines above and below the highlighted one though, you’ll see it’s not the only <code>&lt;div&gt;</code> tag. Luckily, the people who set up the page included an ID for this particular tag, which you can see in <code>&lt;div id=&quot;lyrics&quot;&gt;</code>.</p>
 <p>We can use the <code>html_nodes()</code> function to capture only the part of the web data contained within this particular tag. This function requires two arguments: the output of a call to <code>read_html()</code> and the id of our desired tag, set off with quotes and a hash symbol. The hash does <strong>not</strong> appear in the id listed on the site, so be careful not to forget it.</p>
 <pre class="r"><code>all_too_well_node &lt;- html_nodes(all_too_well, &quot;#lyrics&quot;)
