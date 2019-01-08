@@ -3,39 +3,44 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</loc>
+    <loc>/2019/01/07/a-look-into-roulette-strategy/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/11/18/intro-to-web-scraping/</loc>
     <lastmod>2017-11-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bmjoseph.github.io/2017/10/31/dates-in-r/</loc>
+    <loc>/2017/10/31/dates-in-r/</loc>
     <lastmod>2017-10-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bmjoseph.github.io/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2016-05-05T21:48:51-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bmjoseph.github.io/</loc>
-    <lastmod>2017-11-18T00:00:00+00:00</lastmod>
+    <loc>/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://bmjoseph.github.io/categories/</loc>
+    <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://bmjoseph.github.io/post/</loc>
-    <lastmod>2017-11-18T00:00:00+00:00</lastmod>
+    <loc>/post/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://bmjoseph.github.io/tags/</loc>
+    <loc>/tags/</loc>
     <priority>0</priority>
   </url>
   
