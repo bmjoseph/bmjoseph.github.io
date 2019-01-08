@@ -310,7 +310,7 @@ party_day</code></pre>
 <h1>Using Dates to Manipulate Datasets</h1>
 <p>Let’s put these functions to use on a real dataset. The following data comes from the <a href="https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&amp;DB_Short_Name=On-Time">Bureau of Transportation</a> and has information about the date and delays of many US flights. First let’s load the data:</p>
 <pre class="r"><code># Import using readr
-flights &lt;- read_csv(&quot;../../static/data/flight_delays.csv&quot;, col_types = c(&quot;cnnnnnnn&quot;))
+flights &lt;- read_csv(&quot;../../static/data/date_guide/flight_delays.csv&quot;, col_types = c(&quot;cnnnnnnn&quot;))
 # Let&#39;s examine a slice of 5 rows uniformly distributed through the data
 slice(flights, seq(1, length(flights$FL_DATE), length(flights$FL_DATE)/5)) </code></pre>
 <pre><code>## # A tibble: 5 x 8

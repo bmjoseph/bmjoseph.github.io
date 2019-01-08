@@ -6,18 +6,18 @@
     <description>Recent content in Posts on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 Nov 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bmjoseph.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Dates in R</title>
-      <link>https://bmjoseph.github.io/2017/10/31/dates-in-r/</link>
-      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
+      <title>Intro to Web Scraping</title>
+      <link>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</link>
+      <pubDate>Sat, 18 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2017/10/31/dates-in-r/</guid>
-      <description>Introduction and Motivation Converting to Objects of Class “Date” Lubridate Inconvenient or Uncommon Cases   Operations with Dates Using Dates to Manipulate Datasets Tracking Values with Respect to Time Linear Regression Using Time Data  Conclusion References:   ## You&amp;#39;ll need to have the following packages installed and loaded: library(lubridate) # For dealing with dates library(ggplot2) # For creating visuals and plots library(dplyr) # For working with the data library(readr) # For importing csv data files Introduction and Motivation We have many ways of writing down and understanding dates in English.</description>
+      <guid>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</guid>
+      <description>Introduction and Motivation Reading Web Data into R Background About HTML Using the Package Rvest  Song Lyric Analysis Data Cleaning with Stringr Scraping and Cleaning More Lyrics for Analysis Analysis of Repetition  Making Word Clouds from Song Lyrics Conclusion Reproducibility References   library(rvest) # For web mining library(stringr) # For cleaning Strings library(dplyr) # For manipulating data frames library(tm) # For text operations necessary to create a word cloud library(wordcloud) # For creating a word cloud library(ggplot2) # For producing visualizations Introduction and Motivation We’ve developed a large toolbox for working with and analyzing strings, but so far we’ve been restricted to looking at strings that we either type out by hand or are easily imported as rows and columns in a csv or other spreadsheet format.</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
       <guid>https://bmjoseph.github.io/2017/10/31/dates-in-r/</guid>
-      <description></description>
+      <description>Introduction and Motivation Converting to Objects of Class “Date” Lubridate Inconvenient or Uncommon Cases   Operations with Dates Using Dates to Manipulate Datasets Tracking Values with Respect to Time Linear Regression Using Time Data  Conclusion References:   ## You&amp;#39;ll need to have the following packages installed and loaded: library(lubridate) # For dealing with dates library(ggplot2) # For creating visuals and plots library(dplyr) # For working with the data library(readr) # For importing csv data files Introduction and Motivation We have many ways of writing down and understanding dates in English.</description>
     </item>
     
   </channel>
