@@ -2,39 +2,39 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Blog_Name</title>
-    <link>/post/</link>
+    <link>https://bmjoseph.github.io/post/</link>
     <description>Recent content in Posts on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 07 Jan 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bmjoseph.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>A Look into Roulette Strategy</title>
-      <link>/2019/01/07/a-look-into-roulette-strategy/</link>
+      <link>https://bmjoseph.github.io/2019/01/07/a-look-into-roulette-strategy/</link>
       <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/01/07/a-look-into-roulette-strategy/</guid>
-      <description>Disclaimer Fixed Spin Gambler Fixed Spins and Fixed Goal House Advantage   I recently made a trip to Las Vegas so for this post, I want to run some calculations and simulations to check a gambler’s odds of winning according to different goals and situations. I’ll assume every bet is made on a color (or on odd/even) and thus has a fixed \(p = \frac{18}{38}\) of winning.</description>
+      <guid>https://bmjoseph.github.io/2019/01/07/a-look-into-roulette-strategy/</guid>
+      <description>Disclaimer Fixed Spin Gambler Fixed Spins and Fixed Goal House Advantage   I recently made a trip to Las Vegas, so for this post, I want to run some calculations and simulations to check a gambler’s odds of winning according to different goals and situations. I’ll assume every bet is made on a color (or on odd/even) and thus has a fixed \(p = \frac{18}{38}\) of winning.</description>
     </item>
     
     <item>
       <title>Intro to Web Scraping</title>
-      <link>/2017/11/18/intro-to-web-scraping/</link>
+      <link>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</link>
       <pubDate>Sat, 18 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>/2017/11/18/intro-to-web-scraping/</guid>
+      <guid>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</guid>
       <description>Introduction and Motivation Reading Web Data into R Background About HTML Using the Package Rvest  Song Lyric Analysis Data Cleaning with Stringr Scraping and Cleaning More Lyrics for Analysis Analysis of Repetition  Making Word Clouds from Song Lyrics Conclusion Reproducibility References   library(rvest) # For web mining library(stringr) # For cleaning Strings library(dplyr) # For manipulating data frames library(tm) # For text operations necessary to create a word cloud library(wordcloud) # For creating a word cloud library(ggplot2) # For producing visualizations Introduction and Motivation We’ve developed a large toolbox for working with and analyzing strings, but so far we’ve been restricted to looking at strings that we either type out by hand or are easily imported as rows and columns in a csv or other spreadsheet format.</description>
     </item>
     
     <item>
       <title>Dates in R</title>
-      <link>/2017/10/31/dates-in-r/</link>
+      <link>https://bmjoseph.github.io/2017/10/31/dates-in-r/</link>
       <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/2017/10/31/dates-in-r/</guid>
+      <guid>https://bmjoseph.github.io/2017/10/31/dates-in-r/</guid>
       <description>Introduction and Motivation Converting to Objects of Class “Date” Lubridate Inconvenient or Uncommon Cases   Operations with Dates Using Dates to Manipulate Datasets Tracking Values with Respect to Time Linear Regression Using Time Data  Conclusion References:   ## You&amp;#39;ll need to have the following packages installed and loaded: library(lubridate) # For dealing with dates library(ggplot2) # For creating visuals and plots library(dplyr) # For working with the data library(readr) # For importing csv data files Introduction and Motivation We have many ways of writing down and understanding dates in English.</description>
     </item>
     
