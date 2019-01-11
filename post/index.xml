@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 09 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bmjoseph.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Log Loss as a Measure of Accuracy</title>
+      <link>https://bmjoseph.github.io/2019/01/09/log-loss-as-a-measure-of-accuracy/</link>
+      <pubDate>Wed, 09 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bmjoseph.github.io/2019/01/09/log-loss-as-a-measure-of-accuracy/</guid>
+      <description>Motivation Evaluating a binary classifier can be difficult. Suppose you have a model which takes in some data and predicts whether a certain team will beat their opponent. Let’s say that specifically, it returns the probability that the home team wins. How do you know if your model is doing a good job?
+What about just a standard accuracy? At first glance, it’s nice to say something like: “My model predicts the correct outcome 80% of the time.</description>
+    </item>
     
     <item>
       <title>A Look into Roulette Strategy</title>
