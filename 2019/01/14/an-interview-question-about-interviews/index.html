@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.53" />
+
+
+<title>An Interview Question About Interviews - Blog_Name</title>
+<meta property="og:title" content="An Interview Question About Interviews - Blog_Name">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/bmjoseph">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/baileymjoseph/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">An Interview Question About Interviews</h1>
+
+    
+    <span class="article-date">2019/01/14</span>
+    
+
+    <div class="article-content">
+      
+
+<div id="TOC">
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#simulation">Simulation</a></li>
+<li><a href="#solving-mathematically">Solving Mathematically</a></li>
+<li><a href="#different-candidate-pools">Different Candidate Pools</a></li>
+</ul>
+</div>
+
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>I heard of another interesting interview question – this time about interviews.</p>
+<p>The setup has a few parts:</p>
+<ol style="list-style-type: decimal">
+<li><p>A company has set up 100 interviews for a single role. After each interview, the company will know the relative rank of the candidate – how the candidate stacks up against all candidates seen before. For example, if the 56<sup>th</sup> and 33<sup>rd</sup> candidates are the first to interview (and interivew in that order), the company would only know that the second candidate is the best seen so far. The candidate ranks 1 through 100 are in a random order.</p></li>
+<li><p>The twist is that the company has to decide whether to hire each candidate right at the end of their interview. If they pass on someone to wait for a better option, they can never go back.</p></li>
+<li><p>The company <em>only</em> cares about getting the best candidate. Assume that there’s no difference between getting the second best candidate and the worst candidate.</p></li>
+</ol>
+<p>What should the company do to maximize their chances of hiring the best candidate?</p>
+<p>I think the original interview question was intended as a logic test instead of a math test. The solution is to interview a certain number of candidates with no chance of hiring. Then hire the first candidate you find that’s better than everyone you’ve seen so far.</p>
+<p>I was more interested in the math behind it – how many candidates should we use for the initial phase and what probability do we really have to get the best candidate.</p>
+<p>Thinking about it informally, there’s a tradeoff we’ll have to consider. The more people we use in the initial phase, the higher chance we throw away the best candidate and give us no chance of success. But the fewer people we use in the initial phase, the higher chance we’ll end up hiring someone who isn’t number 1.</p>
+</div>
+<div id="simulation" class="section level2">
+<h2>Simulation</h2>
+<p>As usual when I start to solve a problem, I like to try to simulate it first. This helps me figure out how the whole situation works and usually makes the math process easier. It also serves as a built in validation for the math. The math proves the simulation and the simulation makes sure there are no errors in the math.</p>
+<p>Let’s define the function:</p>
+<pre class="r"><code>simulate_one_hiring &lt;- function(n, p, verbose = F) {
+  # Return T if we hire #1, F otherwise
+  # Inputs:
+  #   - n: Total number of candidates
+  #   - p: Number of candidates initially thrown away
+  # Returns:
+  #    - Boolean, whether the process succeeds
+  
+  # Rank the candidates randomly 1 through 100
+  ranks &lt;- sample(1:100)
+  # if the best candidate gets thrown out, return false
+  if (which(ranks == 1) &lt;= p) {
+    if (verbose) {
+      print(&quot;Threw away the best candidate.&quot;)
+    }
+    return(FALSE)
+  } else {
+    # This is the candidate to beat before hiring
+    best_thrown_out &lt;- min(ranks[1:p])
+    # This is the index of the person who gets hired
+    first_selected_position &lt;- min(which(ranks &lt; best_thrown_out))
+    # This is the rank of the person who gets hired
+    selected_employee &lt;- ranks[first_selected_position]
+    if (verbose) {
+      print(paste(&quot;Best Thrown Out:&quot;,best_thrown_out))
+      print(paste(&quot;First Selected Positiont:&quot;,first_selected_position))
+      print(paste(&quot;Selected Employee:&quot;,selected_employee))
+    }
+    return(selected_employee == 1)
+  }
+}</code></pre>
+<p>And let’s see a few runs and what can happen:</p>
+<p>If we use a small number of test subjects:</p>
+<pre class="r"><code>set.seed(1)
+simulate_one_hiring(100, 5, verbose = T)</code></pre>
+<pre><code>## [1] &quot;Best Thrown Out: 20&quot;
+## [1] &quot;First Selected Positiont: 10&quot;
+## [1] &quot;Selected Employee: 6&quot;</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>There’s a high chance that we won’t see a very good candidate in the test phase, then we’ll select a non optimal candidate.</p>
+<p>If we use a large number of test subjects:</p>
+<pre class="r"><code>set.seed(2)
+simulate_one_hiring(100, 95, verbose = T)</code></pre>
+<pre><code>## [1] &quot;Threw away the best candidate.&quot;</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>There’s a high chance that we’ll throw away the number one candidate.</p>
+<p>If we choose a moderate number, we can get the best candidate:</p>
+<pre class="r"><code>set.seed(3)
+simulate_one_hiring(100, 30, verbose = T)</code></pre>
+<pre><code>## [1] &quot;Best Thrown Out: 2&quot;
+## [1] &quot;First Selected Positiont: 84&quot;
+## [1] &quot;Selected Employee: 1&quot;</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>(Note of course that with different random seeds we could get any result with any of those code chunks.)</p>
+<p>Let’s see how the emprical probability of success changes with each choice of p. To keep things running quickly, I’ll just do 1000 simulations for each choice. The point of this simulation is to understand and validate, not to get precise estimates. You can find full code on my github, but I’ll just display the results below:</p>
+<p><img src="/post/2019-01-14-an-interview-question-about-interviews_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The tradeoff we talked about a bit ago is coming across pretty clearly, and it seems that somewhere in the 30s is best.</p>
+<p>Let’s get to the math.</p>
+</div>
+<div id="solving-mathematically" class="section level2">
+<h2>Solving Mathematically</h2>
+<p>Let <span class="math inline">\(n\)</span> be the total number of candidates (assumed to be 100).<br />
+Let <span class="math inline">\(p\)</span> be the total number of candidates iniitally thrown away.<br />
+Let <span class="math inline">\(k\)</span> be the best candidate that gets initially thrown away.</p>
+<p>We’re going to set everything up conditionally. First, we need to conidition on not throwing away the number one option:</p>
+<p><span class="math display">\[\mathbb{P}(\textrm{Success}) = \mathbb{P}(\textrm{Success | Didn&#39;t throw away best})\mathbb{P}(\textrm{Don&#39;t throw away best})\]</span></p>
+<p>If we didn’t throw away the best candidate, then there’s a best candidate that we didn’t throw away that isn’t number 1.</p>
+<p><span class="math display">\[\mathbb{P}(\textrm{Success | Didn&#39;t throw away best}) = \sum_{\textrm{all k}}(\mathbb{P}(\textrm{Success | Best tossed = k})\mathbb{P}(\textrm{Best tossed = k}))\]</span></p>
+<p>We can calculate the chance that the best tossed is k:<br />
+<span class="math display">\[\mathbb{P}(\textrm{Best tossed = k}) = \mathbb{P}(\textrm{k tossed | Better than k not tossed})\mathbb{P}(\textrm{Better than k not tossed})\]</span></p>
+<p>If we put all these equations together, we get:</p>
+<p><span class="math display">\[\mathbb{P}(\textrm{Success}) = \mathbb{P}(\textrm{Don&#39;t throw away best})[\sum_{\textrm{all k}}(\mathbb{P}(\textrm{Success | Best tossed = k})
+*\mathbb{P}\\(\textrm{k tossed | Better than k not tossed})*\mathbb{P}(\textrm{Better than k not tossed})]\]</span></p>
+<p>(I’m sorry about the ugly formatting. Without it it would go over the page margin and R Markdown isn’t great with full <span class="math inline">\(\LaTeX\)</span> integration.)</p>
+<p>Each of these components should be easy enough to calculate.</p>
+<ul>
+<li><span class="math inline">\(\mathbb{P}(\textrm{Don&#39;t throw away best}) = \frac{n - p}{n}\)</span>
+<ul>
+<li>there are n - p places for number 1 to go without being thrown out</li>
+</ul></li>
+<li>The possible choices for k are 2 to n - p + 1.
+<ul>
+<li>If p = 3 candidates, the worst we could do is 100, 99, 98 in any order. k = 98 = 100 - 3 + 2).<br />
+</li>
+</ul></li>
+<li><span class="math inline">\(\mathbb{P}(\textrm{Success | Best tossed = k}) = \frac{1}{k - 1}\)</span>
+<ul>
+<li>There is one #1 and k - 1 candidates who would be selected. These appear in a uniform random order.<br />
+</li>
+</ul></li>
+<li><span class="math inline">\(\mathbb{P}(\textrm{k tossed | Better than k not tossed}) = \frac{p}{n - k + 1}\)</span>
+<ul>
+<li>p places remain for candidate k to be tossed, (n - k) + 1 total remaining positions.<br />
+</li>
+</ul></li>
+<li><span class="math inline">\(\mathbb{P}(\textrm{Better than k not tossed}) = \frac{{{n - p - 1} \choose {k - 2}}}{{n - 1}\choose {k - 2}}\)</span>.
+<ul>
+<li>This is hard to explain in one line, think about how many ways this is satisfied compared to how many ways are possible.</li>
+</ul></li>
+</ul>
+<p>Putting this all together, we have:</p>
+<p><span class="math display">\[\mathbb{P}(\textrm{Success}) = \frac{n - p}{n}\sum_{k = 2}^{n - p + 1}(\frac{1}{k - 1}
+*\frac{p}{n - k + 1}*\frac{{{n - p - 1} \choose {k - 2}}}{{n - 1}\choose {k - 2}})\]</span></p>
+<p>Let’s see the actual probabilities of the 100 person situation. Again, the implementation code is on my github.</p>
+<p><img src="/post/2019-01-14-an-interview-question-about-interviews_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>As we’d hope, the results are very similar.</p>
+</div>
+<div id="different-candidate-pools" class="section level2">
+<h2>Different Candidate Pools</h2>
+<p>As it turns out, this is a discrete process that approximates a smooth function (if we were to have infinitely many candidates). We can see this by changing p to a fraction of available candidates instead of the actual number of candidates.</p>
+<p>Let’s look at that graph for 10, 100, and 1000 candidates:</p>
+<p><img src="/post/2019-01-14-an-interview-question-about-interviews_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>And finally, here’s a fun graph I made by accident while messing around with this post:</p>
+<p><img src="/post/2019-01-14-an-interview-question-about-interviews_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bmjoseph.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>An Interview Question About Interviews</title>
+      <link>https://bmjoseph.github.io/2019/01/14/an-interview-question-about-interviews/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bmjoseph.github.io/2019/01/14/an-interview-question-about-interviews/</guid>
+      <description>Setup Simulation Solving Mathematically Different Candidate Pools   Setup I heard of another interesting interview question – this time about interviews.
+The setup has a few parts:
+A company has set up 100 interviews for a single role. After each interview, the company will know the relative rank of the candidate – how the candidate stacks up against all candidates seen before. For example, if the 56th and 33rd candidates are the first to interview (and interivew in that order), the company would only know that the second candidate is the best seen so far.</description>
+    </item>
     
     <item>
       <title>Log Loss as a Measure of Accuracy</title>
@@ -41,7 +52,7 @@ Anyway, here’s the problem:</description>
     </item>
     
     <item>
-      <title>Intro to Web Scraping</title>
+      <title>Guide: Intro to Web Scraping</title>
       <link>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</link>
       <pubDate>Sat, 18 Nov 2017 00:00:00 +0000</pubDate>
       
@@ -50,7 +61,7 @@ Anyway, here’s the problem:</description>
     </item>
     
     <item>
-      <title>Dates in R</title>
+      <title>Guide: Dates in R</title>
       <link>https://bmjoseph.github.io/2017/10/31/dates-in-r/</link>
       <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
