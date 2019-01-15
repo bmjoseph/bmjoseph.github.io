@@ -93,9 +93,9 @@ code {
 .content {
   max-width: 700px;
   margin: 40px auto 10px;
-  padding: 0 15px;
-  font-size: 16px;
-  line-height: 1.7;
+  padding: 0 15px; 
+  font-size: 12px; /* used to be 16px */
+  line-height: 1.2; /* used to be 1.7 */
   color: #333;
 }
 
@@ -268,7 +268,7 @@ code {
   }
 
   .content {
-    font-size: 19px;
+    font-size: 16px; /* used to be 19px */
     line-height: 1.8;
   }
 
