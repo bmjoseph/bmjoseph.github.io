@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bmjoseph.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Tornado Plot Animation</title>
+      <link>https://bmjoseph.github.io/2019/03/02/torn-plot_anim/</link>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bmjoseph.github.io/2019/03/02/torn-plot_anim/</guid>
+      <description>I recently thought about the possibility of making art by combining different plots into a gif. I thought back to my time in Oklahoma last summer and experimented with plotting a tornado. Here’s what I came up with. I made the attempt on the left, then the middle, and then finally, the right.
+knitr::include_graphics(c(&amp;#39;/images/conv_conf/torn_weak.gif&amp;#39;, &amp;#39;/images/conv_conf/torn.gif&amp;#39;, &amp;quot;/images/conv_conf/torn_best.gif&amp;quot;)) To figure out how to plot this, I started with four goals:
+I wanted a cone (ish) shape.</description>
+    </item>
     
     <item>
       <title>An Interview Question About Interviews</title>
