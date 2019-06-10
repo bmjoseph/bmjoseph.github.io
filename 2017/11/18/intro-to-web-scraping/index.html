@@ -389,14 +389,16 @@ song_frame$Years_Since_2006 &lt;- years_since_2006
 
 # Display some rows
 slice(song_frame, c(1,2,7,8))</code></pre>
-<pre><code>## # A tibble: 4 x 6
-##               Title Total_Words Unique_Words Fraction_Unique
-##              &lt;fctr&gt;       &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;
+<pre><code>##               Title Total_Words Unique_Words Fraction_Unique
 ## 1 Should&#39;ve Said No         343          107       0.3119534
 ## 2            Change         265          122       0.4603774
 ## 3       Mary&#39;s Song         333          148       0.4444444
 ## 4      The Best Day         348          171       0.4913793
-## # ... with 2 more variables: Opinion &lt;fctr&gt;, Years_Since_2006 &lt;dbl&gt;</code></pre>
+##          Opinion Years_Since_2006
+## 1       favorite                0
+## 2       favorite                2
+## 3 least favorite                0
+## 4 least favorite                2</code></pre>
 <p>Finally, let’s use ggplot2 to make a visualization displaying what we’ve found so far:</p>
 <pre class="r"><code>gg_song_plot &lt;- (ggplot(data = song_frame,
                         aes(x = Years_Since_2006,
@@ -527,21 +529,20 @@ wordcloud(lyric_corpus,
 ## [1] methods   stats     graphics  grDevices utils     datasets  base     
 ## 
 ## other attached packages:
-##  [1] bindrcpp_0.2       ggplot2_2.2.1      wordcloud_2.5     
-##  [4] RColorBrewer_1.1-2 tm_0.7-2           NLP_0.1-11        
-##  [7] dplyr_0.7.4        stringr_1.2.0      rvest_0.3.2       
-## [10] xml2_1.1.1        
+## [1] ggplot2_2.2.1      wordcloud_2.5      RColorBrewer_1.1-2
+## [4] tm_0.7-2           NLP_0.1-11         dplyr_0.8.0.1     
+## [7] stringr_1.2.0      rvest_0.3.2        xml2_1.1.1        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.14     plyr_1.8.4       bindr_0.1        tools_3.3.3     
-##  [5] digest_0.6.13    evaluate_0.10.1  tibble_1.3.4     gtable_0.2.0    
-##  [9] pkgconfig_2.0.1  rlang_0.2.0      yaml_2.2.0       parallel_3.3.3  
+##  [1] Rcpp_1.0.1       pillar_1.3.1     plyr_1.8.4       tools_3.3.3     
+##  [5] digest_0.6.13    evaluate_0.10.1  tibble_2.1.1     gtable_0.2.0    
+##  [9] pkgconfig_2.0.2  rlang_0.3.3      yaml_2.2.0       parallel_3.3.3  
 ## [13] blogdown_0.9     xfun_0.4         httr_1.3.1       knitr_1.21      
-## [17] grid_3.3.3       glue_1.2.0       R6_2.2.2         XML_3.98-1.9    
-## [21] rmarkdown_1.11   bookdown_0.9     selectr_0.3-1    magrittr_1.5    
-## [25] scales_0.5.0     htmltools_0.3.6  assertthat_0.2.0 colorspace_1.3-2
-## [29] labeling_0.3     stringi_1.1.6    lazyeval_0.2.1   munsell_0.4.3   
-## [33] slam_0.1-40</code></pre>
+## [17] grid_3.3.3       tidyselect_0.2.5 glue_1.3.1       R6_2.2.2        
+## [21] XML_3.98-1.9     rmarkdown_1.11   bookdown_0.9     selectr_0.3-1   
+## [25] purrr_0.2.4      magrittr_1.5     scales_0.5.0     htmltools_0.3.6 
+## [29] assertthat_0.2.0 colorspace_1.3-2 labeling_0.3     stringi_1.1.6   
+## [33] lazyeval_0.2.1   munsell_0.4.3    slam_0.1-40      crayon_1.3.4</code></pre>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>

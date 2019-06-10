@@ -6,10 +6,20 @@
     <description>Recent content on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bmjoseph.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Comparing Pokemon Viability and Usage</title>
+      <link>https://bmjoseph.github.io/2019/06/08/comparing-pokemon-viability-and-usage/</link>
+      <pubDate>Sat, 08 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bmjoseph.github.io/2019/06/08/comparing-pokemon-viability-and-usage/</guid>
+      <description>For anyone who’s unfamiliar, a company called Smogon has a Pokemon battle simulator called Pokemon Showdown. While you can play in matches that match the official VGC doubles rules, Smogon has their own tier based singles competitions. Tiers are based on how much each pokemon gets used, but the Smogon forums also provide a “viability ranking” for each poekmon in each tier.
+Today I’m going to investigate the relationship between a Pokemon’s usage and viability in the overused tier.</description>
+    </item>
     
     <item>
       <title>Tornado Plot Animation</title>
