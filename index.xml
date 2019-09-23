@@ -6,10 +6,20 @@
     <description>Recent content on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Simulating Pi Using Buffon&#39;s Needle</title>
+      <link>/2019/09/20/buffon-needle/</link>
+      <pubDate>Fri, 20 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/09/20/buffon-needle/</guid>
+      <description>It figures that Buffon’s needle is one letter away from Buffoon’s needle. You’ve got to be a buffoon to try to estimate \(\pi\) by tossing needles at a piece of paper. Or you’re me, and you’re an even bigger buffoon because you used \(\pi\) to simulate tossing needles at a piece of paper to estimate \(\pi\).
+I first learned about Buffon’s needle as a homework problem in one of my stats classes.</description>
+    </item>
     
     <item>
       <title>Follow Up: Pokemon Viability and Player Success</title>
