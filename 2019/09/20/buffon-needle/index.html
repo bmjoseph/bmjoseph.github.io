@@ -74,7 +74,7 @@
 <p>To do the simulation, I picked a random point for one end of the needle to land, and then a random angle for the direction of the rest of the needle. I realize this is cheating because I choose an angle between 0 and <span class="math inline">\(2 \pi\)</span>, but the idea was to simulate the physical situation of tossing a needle. Nature also lets you use pi as a constant. Oh well.</p>
 <p>To visualize this, let’s first look at just a couple tosses. All the implementation code is on my GitHub as usual.</p>
 <p><img src="/post/2019-09-20-buffon-needle_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>Seven of the ten needles crossed a vertical line, giving us an approximation of <span class="math inline">\(pi\)</span> of <span class="math inline">\(\frac{2}{.7} \approx 2.857\)</span>.</p>
+<p>Seven of the ten needles crossed a vertical line, giving us an approximation of <span class="math inline">\(\pi\)</span> of <span class="math inline">\(\frac{2}{.7} \approx 2.857\)</span>.</p>
 <p>Let’s try it with a few more needles:</p>
 <p><img src="/post/2019-09-20-buffon-needle_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Binomial trials clearly aren’t a very good way to quickly estimate <span class="math inline">\(\pi\)</span>, but to verify that it really will converge, let’s plot the estimate of pi after each of 10,000 trials:</p>
