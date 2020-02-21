@@ -162,10 +162,8 @@ library(readr) # For importing csv data files</code></pre>
 char_days &lt;- c(&quot;Oct 24 2017&quot;, &quot;Oct 25 2017&quot;, &quot;Oct 26 2017&quot;, &quot;Oct 27 2017&quot;,
           &quot;Oct 28 2017&quot;, &quot;Oct 29 2017&quot;, &quot;Oct 30 2017&quot;)
 # First examine the structure -- it looks like we have month, day, year. 
-fixed_days &lt;- mdy(char_days) # mdy comes from the first chart above</code></pre>
-<pre><code>## Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone &#39;zone/tz/2019b.1.0/
-## zoneinfo/America/Los_Angeles&#39;</code></pre>
-<pre class="r"><code># Let&#39;s take a look at our new objects
+fixed_days &lt;- mdy(char_days) # mdy comes from the first chart above
+# Let&#39;s take a look at our new objects
 head(fixed_days, 3)</code></pre>
 <pre><code>## [1] &quot;2017-10-24&quot; &quot;2017-10-25&quot; &quot;2017-10-26&quot;</code></pre>
 <p>Here are a few important things to notice:</p>
@@ -187,8 +185,6 @@ fixed_dates_with_times</code></pre>
 <pre class="r"><code># Adding the correct time zone:
 fixed_time_zones &lt;- mdy_hm(dates_with_times, tz = &quot;America/Los_Angeles&quot;)
 fixed_time_zones</code></pre>
-<pre><code>## Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone &#39;zone/tz/2019b.1.0/
-## zoneinfo/America/Los_Angeles&#39;</code></pre>
 <pre><code>## [1] &quot;2017-10-25 23:40:00 PDT&quot; &quot;2017-01-18 03:45:00 PST&quot;</code></pre>
 <p>Lubridate was even smart enough to distinguish that one of the dates was during daylight savings!</p>
 <div id="inconvenient-or-uncommon-cases" class="section level3">
@@ -217,8 +213,6 @@ not_mixed &lt;- parse_date_time(mixed_formats, # Use the combined dates
               tz = &quot;America/Los_Angeles&quot;)
                             
 not_mixed</code></pre>
-<pre><code>## Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone &#39;zone/tz/2019b.1.0/
-## zoneinfo/America/Los_Angeles&#39;</code></pre>
 <pre><code>## [1] &quot;1998-09-04 PDT&quot; &quot;1997-10-28 PST&quot; &quot;1995-12-26 PST&quot; &quot;1998-03-17 PST&quot;
 ## [5] &quot;1997-12-07 PST&quot;</code></pre>
 <p>One final note for importing dates is that lubridate has no <code>md()</code> function to use when your dates have no year information at all. If this happens, <a href="https://stackoverflow.com/questions/41173724/how-can-i-read-dates-without-year-using-readr">here’s a stack overflow question</a> which explains how you can use <code>parse_date_time</code> to force the parsing anyway:</p>
@@ -320,14 +314,14 @@ flights &lt;- read_csv(&quot;../../static/data/date_guide/flight_delays.csv&quot
 # Let&#39;s examine a slice of 5 rows uniformly distributed through the data
 slice(flights, seq(1, length(flights$FL_DATE), length(flights$FL_DATE)/5)) </code></pre>
 <pre><code>## # A tibble: 5 x 8
-##   FL_DATE CRS_DEP_TIME DEP_TIME DEP_DELAY_NEW CRS_ARR_TIME ARR_TIME
-##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;
-## 1 2016-1…         1640     1644             4         1827     1830
-## 2 2016-1…          725      726             1         1050      958
-## 3 2016-1…         2035     2029             0         2223     2201
-## 4 2016-1…         1000     1002             2         1300     1246
-## 5 2016-1…          930      926             0         1200     1146
-## # … with 2 more variables: ARR_DELAY &lt;dbl&gt;, DISTANCE &lt;dbl&gt;</code></pre>
+##   FL_DATE CRS_DEP_TIME DEP_TIME DEP_DELAY_NEW CRS_ARR_TIME ARR_TIME ARR_DELAY
+##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 2016-1…         1640     1644             4         1827     1830         3
+## 2 2016-1…          725      726             1         1050      958       -52
+## 3 2016-1…         2035     2029             0         2223     2201       -22
+## 4 2016-1…         1000     1002             2         1300     1246       -14
+## 5 2016-1…          930      926             0         1200     1146       -14
+## # … with 1 more variable: DISTANCE &lt;dbl&gt;</code></pre>
 <p>Taking a look at the data we’ve just loaded, we see that FL_DATE tells us the day of the flight as a character in <code>ymd</code>, and the scheduled departure hour and minute information is in CRS_DEP_TIME column as a number. Unfortunately, the time zone information isn’t present, so I’ll choose to leave it as the default: UTC. The source website mentions that all times are correct in their local time zone, so we don’t have to worry about any skewing. Let’s convert the day into a date object and then use the <code>hour()</code> and <code>minute()</code> functions to actually set the hour and minute information into the date:</p>
 <pre class="r"><code># Convert to date
 flights$FL_DATE &lt;- ymd(flights$FL_DATE)
@@ -339,6 +333,7 @@ flight_minute &lt;- flights$CRS_DEP_TIME %% 100 # mod division operator
 hour(flights$FL_DATE) &lt;- flight_hour
 # Add in the minute information
 minute(flights$FL_DATE) &lt;- flight_minute
+flights &lt;- flights %&gt;% mutate(FL_DATE = as.POSIXct(FL_DATE))
 head(flights$FL_DATE)</code></pre>
 <pre><code>## [1] &quot;2016-11-01 16:40:00 UTC&quot; &quot;2016-11-01 16:50:00 UTC&quot;
 ## [3] &quot;2016-11-01 11:35:00 UTC&quot; &quot;2016-11-01 10:25:00 UTC&quot;
@@ -463,6 +458,7 @@ delay_vs_count &lt;- (ggplot(ave_del_by_hour, aes(x = count, y = ave_delay)) +
                      labs(x = &quot;Total Number of Flights&quot;,
                           y = &quot;Average Delay in Minutes&quot;))
 delay_vs_count</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/post/2017-10-31-dates-in-r_files/figure-html/scatterplot%20of%20count%20vs%20delay-1.png" width="672" /></p>
 <p>The first thing to notice when looking at this graph is that there are very few flights at the very end or very beginning of the day. The bottom 5 hours in terms of quantity are in a continuous range from 11:00 PM to 4:59 AM. The bottom 8 hours are from 9:00 PM to 5:59 AM. These 8 hours seem pretty far offset from the rest of the data. In any case, there is no obvious pattern that comes out of this graph. It seems that quantity of flights is not driving the delays. Just to make sure, let’s calculate the correlation coefficient:</p>
 <pre class="r"><code>cor(ave_del_by_hour$count, ave_del_by_hour$ave_delay)</code></pre>
@@ -480,6 +476,7 @@ delay_vs_hour &lt;- (ggplot(popular_times_with_delay, aes(x = hour_of_day,
             labs(x = &quot;Hour of Day&quot;,
                  y = &quot;Average Delay in Minutes&quot;))
 delay_vs_hour</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/post/2017-10-31-dates-in-r_files/figure-html/scatterplot%20of%20delay%20vs%20hour-1.png" width="672" /></p>
 <p>This looks much more correlated, and it is now clear delays do tend to increase as the day progresses. Of course, this only considers the 16 hours of the day with the most flights. As we can see in the count scatterplot, all of these hours are fairly close to each other in terms of number of flights, so in some way this controls for the busyness of the airport. The clear linear association visible in the scatterplot is confirmed by a much larger correlation coefficient:</p>
 <pre class="r"><code>cor(popular_times_with_delay$hour_of_day, popular_times_with_delay$ave_delay)</code></pre>
