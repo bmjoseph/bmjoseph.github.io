@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.53" />
+
+
+<title>Step by Step: Visualizing a Year of Temperatures - Blog_Name</title>
+<meta property="og:title" content="Step by Step: Visualizing a Year of Temperatures - Blog_Name">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/bmjoseph">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/baileymjoseph/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">Step by Step: Visualizing a Year of Temperatures</h1>
+
+    
+    <span class="article-date">2020/03/12</span>
+    
+
+    <div class="article-content">
+      
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The clocks just sprang forward and it’s finally getting warm in Oklahoma! I was thinking about how different the weather’s been here compared to Berkeley (where I was a year ago) and Los Angeles (where I’ve lived for most of my life). Specifically, I feel like I’ve experienced a lot of different weather this year, and wanted to plot it. This will be a step by step look through my thought process as I designed the plot you see below.</p>
+<p><img src="/post/2020-03-12-step-by-step-visualizing-a-year-of-temperatures_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="data-prep" class="section level1">
+<h1>Data Prep</h1>
+<p>The first and least fun step is in getting the data. I had a harder than expected time downloading the daily high and low temperature for different locations. I was eventually able to do it through <a href="https://www.ncdc.noaa.gov/cdo-web/search">this helpful government site</a>. If you want to reproduce these results but don’t want to go to the trouble of downloading your own data, <a href="https://github.com/bmjoseph/blogdown_source/tree/master/content/post">you can get it on my Github here.</a>.</p>
+<p>The next step is in cleaning the data. The government data was in pretty good shape, but failed to parse unless I specified the column types. Readr defaulted to thinking that the tmax and tmin columns were logical and then didn’t understand values like 75. The only other steps were skipping the header row because I wanted to use my own column names and filtering for the one specific station I was most interested in. I won’t include it here, but I did something similar for the LA and OKC weather data, except this time I was smart enough to download them together as one csv. <a href="https://github.com/bmjoseph/blogdown_source/tree/master/content/post">Code is here</a></p>
+<pre class="r"><code>berkeley_weather &lt;- read_csv(glue(&quot;{file_path}/berkeley_weather.csv&quot;),
+                             col_names = c(&quot;abbrev&quot;, &quot;station&quot;, &quot;obs_date&quot;, &quot;tmax&quot;, &quot;tmin&quot;),
+                             col_types = &quot;cccdd&quot;, skip = 1) %&gt;% 
+  mutate(obs_date = as.Date(obs_date)) %&gt;% 
+  filter(station == &quot;BERKELEY, CA US&quot;) %&gt;% 
+  mutate(station = ifelse(station == &quot;BERKELEY, CA US&quot;, &quot;Berkeley&quot;, station))</code></pre>
+<p>Once the data was in a tidy format, I needed to combine it and add a column matching the city I was in each day, not accounting for vacations or any work travel.</p>
+<pre class="r"><code>weather_data &lt;- berkeley_weather %&gt;% 
+  bind_rows(la_okc_weather) %&gt;% 
+  filter(obs_date &lt; as.Date(&quot;2020-03-01&quot;)) %&gt;% 
+  mutate(location = case_when(obs_date &lt;= as.Date(&quot;2019-05-22&quot;) ~ &quot;Berkeley&quot;,
+                              obs_date &lt;= as.Date(&quot;2019-10-10&quot;) ~ &quot;Los Angeles&quot;,
+                              TRUE ~ &quot;Oklahoma City&quot;)) %&gt;% 
+  filter(station == location) %&gt;%
+  mutate(obs_week = week(obs_date),
+         obs_year = year(obs_date)) %&gt;% 
+  mutate(obs_week = ifelse(obs_week &gt; 52, 52, obs_week)) </code></pre>
+<p>Great, it’s time to start plotting! I’m not going to show the code for each visual. I’ll focus on my thought process instead.</p>
+</div>
+<div id="visualization" class="section level1">
+<h1>Visualization</h1>
+<div id="exploring" class="section level2">
+<h2>Exploring</h2>
+<p>So my first idea for a plot is pretty simple – what was the high and low temperature each day? I basically wanted one rectangle per day spanning from the daily low to the daily high. At this stage I decided to use a ribbon plot to seamlessly move from one day to the next. I also colored by location to help highlight any clear differences from that dimension.</p>
+<p><img src="/post/2020-03-12-step-by-step-visualizing-a-year-of-temperatures_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>I was actually pretty happy with this plot. Already we can see that LA has a nice peak in the summer, that OKC has the potential to get pretty cold (relative to what I’m used to at least) and has far more variation than the other two cities.</p>
+<p>With that said, there are some clear ways we can improve this plot. At the moment it’s too jumpy, especially in the OKC section. My next move was to make a version of the weather data that was summarized on a weekly level. The new “min” and “max” temperatures are the average min and max throughout the days of the particular week.</p>
+<p><img src="/post/2020-03-12-step-by-step-visualizing-a-year-of-temperatures_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>This one is more visually pleasing to me, but now has a major problem that was really just my error. The values are supposed to be constant throughout the week, but you can see that there are still sharp points. I set x to the middle day of each week, so the ribbon plot moves from one week to the next in a linear fashion. The next version of the plot will clean this up.</p>
+<p>It’s also time to improve the axes by adding information. I’m going to specify the y-axis breaks to be some particular temperatures that cover the range and hit more interesting numbers. For the x-axis, I’m going to drop the year (in general I’d say that’s not a very good idea, but this project is pretty specific and I don’t want it. The change from Berkeley to LA to OKC is going to clue me in.) and add a label for every month.</p>
+<p><img src="/post/2020-03-12-step-by-step-visualizing-a-year-of-temperatures_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>I think this is much better. The flat weeks are now faithful to our intentions and we can easily see that aside from one July outlier, the second half of August and first half of September was the hottest part of the LA summer, and the only part where the weekly average high was over 80. Also, there’ve been quite a few Oklahoma weeks with average lows less than 32 degrees, spanning from the very end of October to the very end of February.</p>
+</div>
+<div id="coloring-by-temperature" class="section level2">
+<h2>Coloring by Temperature</h2>
+<p>The next improvement is going to help the viewer focus in more on the temperature than the location. Color and temperature go together nicely and I think I can get away with using annotations to highlight the cities. At this point, I also got a tough error telling me I could no longer use ribbon plots because I couldn’t have different colors in the same ribbon. <a href="https://stackoverflow.com/questions/27189453/shade-fill-or-color-area-under-density-curve-by-quantile">This Stack Overflow post</a> led me to overcome it by iteratively adding colored rectangles to an empty plot. Like the person who answered the question, I don’t feel good about using a for loop to add components to the plot. The plot is a bit bloated and takes longer to render than the others. But I do think it’s a good lesson on thinking about when you should optimize your code and find the most elegant solution. In an early/fundamental/reusable stage – definitely Near the end when you’re making a one off plot? Probably not, unless you think it’s likely to crop up in a more fundamental stage of a different project. In this case, I’m moving forward and accepting the bloat. Big credit to the original poster who found this workaround.</p>
+<p><img src="/post/2020-03-12-step-by-step-visualizing-a-year-of-temperatures_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>I really thought this was going to be the final version of the plot. I’m happy with it. The colors took some work, but I think the scale is smooth and find the new plot much more interesting and aesthetically pleasing. It clearly separates the three cities into medium (Berkeley), hot (LA), and cold (OKC) and draws attention to the most extreme weeks.</p>
+<p>The last addition tells us the true range each week. As Taleb once said, an average temperature of 75 degrees doesn’t do us much good if the reality alternates between 25 and 125. I also wanted to bring back some idea of the daily variation from the very first plot. So I’m going to add in grey “range” lines showing each week’s true min and max temperature.</p>
+<p><img src="/post/2020-03-12-step-by-step-visualizing-a-year-of-temperatures_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>This shows us that Berkeley and LA basically never have cold days. There were two weeks where Berkeley’s lows hit the 30s and the LA summer almost never hit a daily low less than 60. On the other hand, Oklahoma has crazy variation. There was a week in November that went below freezing and above 75 and a couple others that went well below 20 but fell just short of 75.</p>
+</div>
+<div id="bonus" class="section level2">
+<h2>Bonus</h2>
+<p>One last cool graph for making it all the way here. I tossed the last graph into a polar coordinates and removed almost every plot element. March 2019 is at the top and the year progresses clockwise.</p>
+<p><img src="/post/2020-03-12-step-by-step-visualizing-a-year-of-temperatures_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

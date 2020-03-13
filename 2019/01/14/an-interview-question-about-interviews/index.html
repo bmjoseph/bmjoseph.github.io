@@ -125,7 +125,7 @@
     selected_employee &lt;- ranks[first_selected_position]
     if (verbose) {
       print(paste(&quot;Best Thrown Out:&quot;,best_thrown_out))
-      print(paste(&quot;First Selected Positiont:&quot;,first_selected_position))
+      print(paste(&quot;First Selected Position:&quot;,first_selected_position))
       print(paste(&quot;Selected Employee:&quot;,selected_employee))
     }
     return(selected_employee == 1)
@@ -133,9 +133,11 @@
 }</code></pre>
 <p>And let’s see a few runs and what can happen:</p>
 <p>If we use a small number of test subjects:</p>
-<pre class="r"><code>set.seed(1)
+<pre class="r"><code>set.seed(2)
 simulate_one_hiring(100, 5, verbose = T)</code></pre>
-<pre><code>## [1] &quot;Threw away the best candidate.&quot;</code></pre>
+<pre><code>## [1] &quot;Best Thrown Out: 6&quot;
+## [1] &quot;First Selected Position: 15&quot;
+## [1] &quot;Selected Employee: 3&quot;</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p>There’s a high chance that we won’t see a very good candidate in the test phase, then we’ll select a non optimal candidate.</p>
 <p>If we use a large number of test subjects:</p>
@@ -145,12 +147,12 @@ simulate_one_hiring(100, 95, verbose = T)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p>There’s a high chance that we’ll throw away the number one candidate.</p>
 <p>If we choose a moderate number, we can get the best candidate:</p>
-<pre class="r"><code>set.seed(3)
+<pre class="r"><code>set.seed(6)
 simulate_one_hiring(100, 30, verbose = T)</code></pre>
-<pre><code>## [1] &quot;Best Thrown Out: 5&quot;
-## [1] &quot;First Selected Positiont: 33&quot;
-## [1] &quot;Selected Employee: 3&quot;</code></pre>
-<pre><code>## [1] FALSE</code></pre>
+<pre><code>## [1] &quot;Best Thrown Out: 2&quot;
+## [1] &quot;First Selected Position: 93&quot;
+## [1] &quot;Selected Employee: 1&quot;</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <p>(Note of course that with different random seeds we could get any result with any of those code chunks.)</p>
 <p>Let’s see how the emprical probability of success changes with each choice of p. To keep things running quickly, I’ll just do 1000 simulations for each choice. The point of this simulation is to understand and validate, not to get precise estimates. You can find full code on my github, but I’ll just display the results below:</p>
 <p><img src="/post/2019-01-14-an-interview-question-about-interviews_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>

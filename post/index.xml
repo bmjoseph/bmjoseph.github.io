@@ -2,60 +2,69 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Blog_Name</title>
-    <link>https://bmjoseph.github.io/post/</link>
+    <link>/post/</link>
     <description>Recent content in Posts on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 14 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 12 Mar 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://bmjoseph.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Step by Step: Visualizing a Year of Temperatures</title>
+      <link>/2020/03/12/step-by-step-visualizing-a-year-of-temperatures/</link>
+      <pubDate>Thu, 12 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/03/12/step-by-step-visualizing-a-year-of-temperatures/</guid>
+      <description>Introduction The clocks just sprang forward and it’s finally getting warm in Oklahoma! I was thinking about how different the weather’s been here compared to Berkeley (where I was a year ago) and Los Angeles (where I’ve lived for most of my life). Specifically, I feel like I’ve experienced a lot of different weather this year, and wanted to plot it. This will be a step by step look through my thought process as I designed the plot you see below.</description>
+    </item>
+    
+    <item>
       <title>Visualizing my Walking Data</title>
-      <link>https://bmjoseph.github.io/2020/02/14/visualizing-my-walking-data/</link>
+      <link>/2020/02/14/visualizing-my-walking-data/</link>
       <pubDate>Fri, 14 Feb 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2020/02/14/visualizing-my-walking-data/</guid>
+      <guid>/2020/02/14/visualizing-my-walking-data/</guid>
       <description>I recently (re) downloaded my Apple heath data going back to July 25th, 2016, when I bought my first iPhone. This covers my final three years of college and the roughly 8 months it’s been since I graduated. I’d like to track my walking habits over time, paying specific attention to how things changed when I was in school, on break, or working.
 First, let’s just look at the average amount I walked each day during each “period”, or continuous chunk of time where I was either in school, on a school break, working, or waiting to start my next job.</description>
     </item>
     
     <item>
       <title>Simulating Pi Using Buffon&#39;s Needle</title>
-      <link>https://bmjoseph.github.io/2019/09/20/buffon-needle/</link>
+      <link>/2019/09/20/buffon-needle/</link>
       <pubDate>Fri, 20 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2019/09/20/buffon-needle/</guid>
+      <guid>/2019/09/20/buffon-needle/</guid>
       <description>It figures that Buffon’s needle is one letter away from Buffoon’s needle. You’ve got to be a buffoon to try to estimate \(\pi\) by tossing needles at a piece of paper. Or you’re me, and you’re an even bigger buffoon because you used \(\pi\) to simulate tossing needles at a piece of paper to estimate \(\pi\).
 I first learned about Buffon’s needle as a homework problem in one of my stats classes.</description>
     </item>
     
     <item>
       <title>Follow Up: Pokemon Viability and Player Success</title>
-      <link>https://bmjoseph.github.io/2019/06/10/follow-up-pokemon-viabiity-and-player-success/</link>
+      <link>/2019/06/10/follow-up-pokemon-viabiity-and-player-success/</link>
       <pubDate>Mon, 10 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2019/06/10/follow-up-pokemon-viabiity-and-player-success/</guid>
+      <guid>/2019/06/10/follow-up-pokemon-viabiity-and-player-success/</guid>
       <description>In my last post, we saw that Pokemon with higher viability ranks tend to get more usage than Pokemon with low viability ranks. That’s interesting, but it doesn’t really show that higher viability means a Pokemon is better, or even that viability rankings mean anything at all. It could just be that players check the rankings before making their teams. I still won’t be able to prove that viability means anything (for that, we’d need a lot of players to use randomly assigned Pokemon against randomly assigned opponents doing the same thing, probably with a blocked design), but this post will check to see if higher viability Pokemon are relatively more common at the upper end of the ladder.</description>
     </item>
     
     <item>
       <title>Comparing Pokemon Viability and Usage</title>
-      <link>https://bmjoseph.github.io/2019/06/08/comparing-pokemon-viability-and-usage/</link>
+      <link>/2019/06/08/comparing-pokemon-viability-and-usage/</link>
       <pubDate>Sat, 08 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2019/06/08/comparing-pokemon-viability-and-usage/</guid>
+      <guid>/2019/06/08/comparing-pokemon-viability-and-usage/</guid>
       <description>For anyone who’s unfamiliar, a company called Smogon has a Pokemon battle simulator called Pokemon Showdown. While you can play in matches that match the official VGC doubles rules, Smogon has their own tier based singles competitions. Tiers are based on how much each pokemon gets used, but the Smogon forums also provide a “viability ranking” for each poekmon in each tier.
 Today I’m going to investigate the relationship between a Pokemon’s usage and viability in the overused tier.</description>
     </item>
     
     <item>
       <title>Tornado Plot Animation</title>
-      <link>https://bmjoseph.github.io/2019/03/02/torn-plot_anim/</link>
+      <link>/2019/03/02/torn-plot_anim/</link>
       <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2019/03/02/torn-plot_anim/</guid>
+      <guid>/2019/03/02/torn-plot_anim/</guid>
       <description>I recently thought about the possibility of making art by combining different plots into a gif. I thought back to my time in Oklahoma last summer and experimented with plotting a tornado. Here’s what I came up with. I made the attempt on the left, then the middle, and then finally, the right.
 knitr::include_graphics(c(&amp;#39;/images/conv_conf/torn_weak.gif&amp;#39;, &amp;#39;/images/conv_conf/torn.gif&amp;#39;, &amp;quot;/images/conv_conf/torn_best.gif&amp;quot;)) To figure out how to plot this, I started with four goals:
 I wanted a cone (ish) shape.</description>
@@ -63,10 +72,10 @@ I wanted a cone (ish) shape.</description>
     
     <item>
       <title>An Interview Question About Interviews</title>
-      <link>https://bmjoseph.github.io/2019/01/14/an-interview-question-about-interviews/</link>
+      <link>/2019/01/14/an-interview-question-about-interviews/</link>
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2019/01/14/an-interview-question-about-interviews/</guid>
+      <guid>/2019/01/14/an-interview-question-about-interviews/</guid>
       <description>Setup Simulation Solving Mathematically Different Candidate Pools Converging to e    Setup I heard of another interesting interview question – this time about interviews.
 The setup has a few parts:
 A company has set up 100 interviews for a single role. After each interview, the company will know the relative rank of the candidate – how the candidate stacks up against all candidates seen before. For example, if the 56th and 33rd candidates are the first to interview (and interivew in that order), the company would only know that the second candidate is the best seen so far.</description>
@@ -74,48 +83,48 @@ A company has set up 100 interviews for a single role. After each interview, the
     
     <item>
       <title>Log Loss as a Measure of Accuracy</title>
-      <link>https://bmjoseph.github.io/2019/01/09/log-loss-as-a-measure-of-accuracy/</link>
+      <link>/2019/01/09/log-loss-as-a-measure-of-accuracy/</link>
       <pubDate>Wed, 09 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2019/01/09/log-loss-as-a-measure-of-accuracy/</guid>
+      <guid>/2019/01/09/log-loss-as-a-measure-of-accuracy/</guid>
       <description>Motivation Evaluating a binary classifier can be difficult. Suppose you have a model which takes in some data and predicts whether a certain team will beat their opponent. Let’s say that specifically, it returns the probability that the home team wins. How do you know if your model is doing a good job?
 What about just a standard accuracy? At first glance, it’s nice to say something like: “My model predicts the correct outcome 80% of the time.</description>
     </item>
     
     <item>
       <title>A Look into Roulette Strategy</title>
-      <link>https://bmjoseph.github.io/2019/01/07/a-look-into-roulette-strategy/</link>
+      <link>/2019/01/07/a-look-into-roulette-strategy/</link>
       <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2019/01/07/a-look-into-roulette-strategy/</guid>
+      <guid>/2019/01/07/a-look-into-roulette-strategy/</guid>
       <description>Disclaimer Fixed Spin Gambler Fixed Spins and Fixed Goal House Advantage   I recently made a trip to Las Vegas, so for this post, I want to run some calculations and simulations to check a gambler’s odds of winning according to different goals and situations. I’ll assume every bet is made on a color (or on odd/even) and thus has a fixed \(p = \frac{18}{38}\) of winning.</description>
     </item>
     
     <item>
       <title>An Interesting Expectation Question</title>
-      <link>https://bmjoseph.github.io/2018/12/05/an-interesting-expectation-question/</link>
+      <link>/2018/12/05/an-interesting-expectation-question/</link>
       <pubDate>Wed, 05 Dec 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2018/12/05/an-interesting-expectation-question/</guid>
+      <guid>/2018/12/05/an-interesting-expectation-question/</guid>
       <description>Setup My friend recently encountered an interesting interview question. Unfortunately, he couldn’t answer it off the top of his head during the interview. We talked about it later – I couldn’t answer it either. The problem intrigued me, so I’ve passed it around but thus far haven’t found anyone who can give an answer without sitting down and thinking privately.
 Anyway, here’s the problem:</description>
     </item>
     
     <item>
       <title>Guide: Intro to Web Scraping</title>
-      <link>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</link>
+      <link>/2017/11/18/intro-to-web-scraping/</link>
       <pubDate>Sat, 18 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</guid>
+      <guid>/2017/11/18/intro-to-web-scraping/</guid>
       <description>Introduction and Motivation Reading Web Data into R Background About HTML Using the Package Rvest  Song Lyric Analysis Data Cleaning with Stringr Scraping and Cleaning More Lyrics for Analysis Analysis of Repetition  Making Word Clouds from Song Lyrics Conclusion Reproducibility References   library(rvest) # For web mining library(stringr) # For cleaning Strings library(dplyr) # For manipulating data frames library(tm) # For text operations necessary to create a word cloud library(wordcloud) # For creating a word cloud library(ggplot2) # For producing visualizations Introduction and Motivation We’ve developed a large toolbox for working with and analyzing strings, but so far we’ve been restricted to looking at strings that we either type out by hand or are easily imported as rows and columns in a csv or other spreadsheet format.</description>
     </item>
     
     <item>
       <title>Guide: Dates in R</title>
-      <link>https://bmjoseph.github.io/2017/10/31/dates-in-r/</link>
+      <link>/2017/10/31/dates-in-r/</link>
       <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://bmjoseph.github.io/2017/10/31/dates-in-r/</guid>
+      <guid>/2017/10/31/dates-in-r/</guid>
       <description>Introduction and Motivation Converting to Objects of Class “Date” Lubridate Inconvenient or Uncommon Cases   Operations with Dates Using Dates to Manipulate Datasets Tracking Values with Respect to Time Linear Regression Using Time Data  Conclusion References:   ## You&amp;#39;ll need to have the following packages installed and loaded: library(lubridate) # For dealing with dates library(ggplot2) # For creating visuals and plots library(dplyr) # For working with the data library(readr) # For importing csv data files Introduction and Motivation We have many ways of writing down and understanding dates in English.</description>
     </item>
     
