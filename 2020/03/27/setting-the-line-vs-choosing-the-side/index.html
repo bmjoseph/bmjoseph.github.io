@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.53" />
+
+
+<title>Setting the Line vs Choosing the Side - Blog_Name</title>
+<meta property="og:title" content="Setting the Line vs Choosing the Side - Blog_Name">
+
+
+
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/bmjoseph">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/baileymjoseph/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">5 min read</span>
+    
+
+    <h1 class="article-title">Setting the Line vs Choosing the Side</h1>
+
+    
+    <span class="article-date">2020/03/27</span>
+    
+
+    <div class="article-content">
+      
+
+
+<p>Your friend comes up to you and asks if you want to bet over/under on something, say, the number of words in the first Harry Potter book. You’re always in for a bet, so he sets the line at 100,000 words and asks you to pick a side. This is a fair bet, right?</p>
+<p>Assuming that your friend did not set the line exactly right and thus instantly win, the first thing to realize is that this cannot possibly be unfair in favor of your friend. Even if you have no idea and guess randomly, you shouldn’t ever have less than 50% chance to win. This is somewhat clear if your friend’s lines are unbiased, because then the real value will be on each side of the line 50% of the time. However, even if he’s biased in an unknown direction, you still have at least a 50% chance. The guess is really then just which direction he’s biased towards, and there’s no reason you’d get that wrong more than half the time.</p>
+<p>But will your guess be better than 50/50 random? Of course, it could be in your favor. At the extreme, you’d win 100% if you’d recently counted all the words and know the exact value. If you’ve read the series several times while your friend has only ever watched the movie, it’s pretty natural to assume that you’ll be somewhere between 50 and 100% to win.</p>
+<p>Okay, but surely the bet is fair if you and your friend have equal information. Right? Suppose that you’re both going to be correct on average (the book has 76944 words according to <a href="https://wordcounter.io/blog/how-many-words-are-in-harry-potter/">this site</a>), and your beliefs about the exact number will be drawn from the same normal distribution centered on the actual answer. You each have a 50% chance for your belief to be closer to the real value.</p>
+<p>If you’d like, stop and try to figure out the probability that you win. In the meantime, enjoy this plot of Harry Potter books (all word count data from the site linked above, don’t try to collect any money from me if my lines are wrong…) acting as a spoiler tag for the solution.</p>
+<p><img src="/post/2020-03-27-setting-the-line-vs-choosing-the-side_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Okay, let’s think about you and your friend’s possible beleifs and what needs to happen for you to lose the bet:</p>
+<ol style="list-style-type: decimal">
+<li><p>If you happen to fall on opposite sides of the truth (your friend sets the line at 100,000 and you think it’s 50,000), you’re guaranteed to win, becuase you’ll take the under (or over, in the reverse). This will happen half the time.</p></li>
+<li><p>If you’re on the same side of the truth (both believe too high or too low), you’ll win as long as you’re less wrong than your friend. Because you have the same distribution, it’s just 50/50 who will be more wrong.</p></li>
+</ol>
+<p>Putting these together, we have:</p>
+<p><span class="math inline">\(\begin{aligned} P(\text{You win}) &amp;= P(\text{different sides}) + P(\text{same side})*P(\text{You&#39;re less wrong}) \\ &amp;= .5 +.5(.5) \\ &amp;= .75 \end{aligned}\)</span></p>
+<p>Let’s add one last layer of compliation. What if you and your friend draw your beliefs from normal distributions that have different variances?</p>
+<p>The first part of the equation doesn’t change. You still have a 50% chance to come down on opposite sides of the truth and you’ll still win every time if that happens. But the second part <em>does</em> change – who’s more wrong is no longer 50/50 if the variances are different. To see why, assume that you’re both overestimating, but your variance is now only 1 word (don’t worry about the fact that words are discrete, the Harry Potter example is just to make things concrete.) If you guess too high, it’s probably only by a word or so. If your friend has a standard deviation of 1000, he’d have to get incredibly lucky to be off by only a single word.</p>
+<p>Let’s follow how your odds of winning change with the ratio of your standard deviations. The math is a little harder here (See <a href="https://math.stackexchange.com/questions/803421/probability-that-one-folded-normal-is-bigger-than-another">this Stack Exchange post</a>. One guy says it’s doable but difficult and provides no crumbs towards a solution. The other guy provides an incorrect solution, as it always returns .5 if the means are equal.), so let’s do a simulation:</p>
+<p><img src="/post/2020-03-27-setting-the-line-vs-choosing-the-side_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>If your friend has almost no variance, you can only win through method 1 above. As your friend’s variance increases, your win probability tends toward 1.</p>
+<p>Let’s see if we can derive a formula for this relationship. Let’s start with trying to calculate the value for a single ratio – 2. Let’s plot these distributions and build some intuition:</p>
+<p><img src="/post/2020-03-27-setting-the-line-vs-choosing-the-side_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>In order for you to win, you need to avoid being off by more and off in the same direction as your friend. This is symmetric, so let’s just look at the positive side and then multiply by 2 at the end.</p>
+<p>Therefore, our win probability is 2 times the integral from 0 to infinity of our density function times .5 plus your friend’s CDF. Pick a positive value for your belief, and then calculate the chance your friend’s value is either negative or larger than your belief.</p>
+<p>Quickly visualizing this, here’s the same plot as before, but with the empirical win probabilities replaced with points and the (estimated) integral plotted as a line:</p>
+<p><img src="/post/2020-03-27-setting-the-line-vs-choosing-the-side_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>In theory, you can win money by betting based on this curve. Of course, theory and practice are only the same in theory. Neither you nor your friend are going to be unbiased, you’re not drawing beliefs from a normal distribution, and you have no idea how much error to expect. So like a lot of normal based models, this isn’t very practically useful.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
