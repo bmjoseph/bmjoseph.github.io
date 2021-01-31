@@ -6,10 +6,28 @@
     <description>Recent content in Posts on Blog_Name</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 Jan 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bmjoseph.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Searching for the Optimal Nine Card Strategy</title>
+      <link>https://bmjoseph.github.io/2021/01/30/searching-for-the-optimal-nine-card-strategy/</link>
+      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bmjoseph.github.io/2021/01/30/searching-for-the-optimal-nine-card-strategy/</guid>
+      <description>Introduction Nine Card is a simple rummy style card game with one major complication – any player can end the game when they feel they have the best chance to win. The game is played as a sequence of independent rounds where the goal is to minimize the value of the cards in your hand that cannot fit into “runs” (like a straight flush in poker but only requiring 3 or more cards) or “sets” (3 or 4 of a kind).</description>
+    </item>
+    
+    <item>
+      <title>Playing Around with The Office Script</title>
+      <link>https://bmjoseph.github.io/2020/04/04/playing-around-with-the-office-script/</link>
+      <pubDate>Sat, 04 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bmjoseph.github.io/2020/04/04/playing-around-with-the-office-script/</guid>
+      <description>file_path &amp;lt;- &amp;quot;../../static/data/office&amp;quot; theme_clean &amp;lt;- function() { theme_bw(base_size = 11) + theme(text = element_text(family = &amp;quot;Roboto&amp;quot;), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(), panel.background = element_rect(colour = &amp;quot;#E1E1E1&amp;quot;), panel.border = element_blank()) } library(scales) library(lubridate) ## ## Attaching package: &amp;#39;lubridate&amp;#39; ## The following object is masked from &amp;#39;package:base&amp;#39;: ## ## date library(readr) ## ## Attaching package: &amp;#39;readr&amp;#39; ## The following object is masked from &amp;#39;package:scales&amp;#39;: ## ## col_factor library(glue) library(dplyr) ## ## Attaching package: &amp;#39;dplyr&amp;#39; ## The following object is masked from &amp;#39;package:glue&amp;#39;: ## ## collapse ## The following objects are masked from &amp;#39;package:lubridate&amp;#39;: ## ## intersect, setdiff, union ## The following objects are masked from &amp;#39;package:stats&amp;#39;: ## ## filter, lag ## The following objects are masked from &amp;#39;package:base&amp;#39;: ## ## intersect, setdiff, setequal, union library(ggplot2) library(stringr) # Read in the data script &amp;lt;- read_csv(glue(&amp;quot;{file_path}/office_script.</description>
+    </item>
     
     <item>
       <title>Setting the Line vs Choosing the Side</title>
@@ -65,8 +83,7 @@ I first learned about Buffon’s needle as a homework problem in one of my stats
       <pubDate>Sat, 08 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bmjoseph.github.io/2019/06/08/comparing-pokemon-viability-and-usage/</guid>
-      <description>For anyone who’s unfamiliar, a company called Smogon has a Pokemon battle simulator called Pokemon Showdown. While you can play in matches that match the official VGC doubles rules, Smogon has their own tier based singles competitions. Tiers are based on how much each pokemon gets used, but the Smogon forums also provide a “viability ranking” for each poekmon in each tier.
-Today I’m going to investigate the relationship between a Pokemon’s usage and viability in the overused tier.</description>
+      <description>For anyone who’s unfamiliar, a company called Smogon has a Pokemon battle simulator called Pokemon Showdown. While you can play in matches that match the official VGC doubles rules, Smogon has their own tier based singles competitions. Tiers are based on how much each pokemon gets used, but the Smogon forums also provide a “viability ranking” for each poekmon in each tier.</description>
     </item>
     
     <item>
@@ -76,8 +93,7 @@ Today I’m going to investigate the relationship between a Pokemon’s usage an
       
       <guid>https://bmjoseph.github.io/2019/03/02/torn-plot_anim/</guid>
       <description>I recently thought about the possibility of making art by combining different plots into a gif. I thought back to my time in Oklahoma last summer and experimented with plotting a tornado. Here’s what I came up with. I made the attempt on the left, then the middle, and then finally, the right.
-knitr::include_graphics(c(&amp;#39;/images/conv_conf/torn_weak.gif&amp;#39;, &amp;#39;/images/conv_conf/torn.gif&amp;#39;, &amp;quot;/images/conv_conf/torn_best.gif&amp;quot;)) To figure out how to plot this, I started with four goals:
-I wanted a cone (ish) shape.</description>
+knitr::include_graphics(c(&amp;#39;/images/conv_conf/torn_weak.gif&amp;#39;, &amp;#39;/images/conv_conf/torn.gif&amp;#39;, &amp;quot;/images/conv_conf/torn_best.gif&amp;quot;)) To figure out how to plot this, I started with four goals:</description>
     </item>
     
     <item>
@@ -86,9 +102,9 @@ I wanted a cone (ish) shape.</description>
       <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bmjoseph.github.io/2019/01/14/an-interview-question-about-interviews/</guid>
-      <description>Setup Simulation Solving Mathematically Different Candidate Pools Converging to e    Setup I heard of another interesting interview question – this time about interviews.
+      <description>Setup Simulation Solving Mathematically Different Candidate Pools  Converging to e    Setup I heard of another interesting interview question – this time about interviews.
 The setup has a few parts:
-A company has set up 100 interviews for a single role. After each interview, the company will know the relative rank of the candidate – how the candidate stacks up against all candidates seen before. For example, if the 56th and 33rd candidates are the first to interview (and interivew in that order), the company would only know that the second candidate is the best seen so far.</description>
+A company has set up 100 interviews for a single role. After each interview, the company will know the relative rank of the candidate – how the candidate stacks up against all candidates seen before.</description>
     </item>
     
     <item>
@@ -126,7 +142,7 @@ Anyway, here’s the problem:</description>
       <pubDate>Sat, 18 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://bmjoseph.github.io/2017/11/18/intro-to-web-scraping/</guid>
-      <description>Introduction and Motivation Reading Web Data into R Background About HTML Using the Package Rvest  Song Lyric Analysis Data Cleaning with Stringr Scraping and Cleaning More Lyrics for Analysis Analysis of Repetition  Making Word Clouds from Song Lyrics Conclusion Reproducibility References   library(rvest) # For web mining library(stringr) # For cleaning Strings library(dplyr) # For manipulating data frames library(tm) # For text operations necessary to create a word cloud library(wordcloud) # For creating a word cloud library(ggplot2) # For producing visualizations Introduction and Motivation We’ve developed a large toolbox for working with and analyzing strings, but so far we’ve been restricted to looking at strings that we either type out by hand or are easily imported as rows and columns in a csv or other spreadsheet format.</description>
+      <description>Introduction and Motivation Reading Web Data into R  Background About HTML Using the Package Rvest  Song Lyric Analysis  Data Cleaning with Stringr Scraping and Cleaning More Lyrics for Analysis Analysis of Repetition  Making Word Clouds from Song Lyrics Conclusion Reproducibility References   library(rvest) # For web mining library(stringr) # For cleaning Strings library(dplyr) # For manipulating data frames library(tm) # For text operations necessary to create a word cloud library(wordcloud) # For creating a word cloud library(ggplot2) # For producing visualizations Introduction and Motivation We’ve developed a large toolbox for working with and analyzing strings, but so far we’ve been restricted to looking at strings that we either type out by hand or are easily imported as rows and columns in a csv or other spreadsheet format.</description>
     </item>
     
     <item>
@@ -135,7 +151,7 @@ Anyway, here’s the problem:</description>
       <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
       <guid>https://bmjoseph.github.io/2017/10/31/dates-in-r/</guid>
-      <description>Introduction and Motivation Converting to Objects of Class “Date” Lubridate Inconvenient or Uncommon Cases   Operations with Dates Using Dates to Manipulate Datasets Tracking Values with Respect to Time Linear Regression Using Time Data  Conclusion References:   ## You&amp;#39;ll need to have the following packages installed and loaded: library(lubridate) # For dealing with dates library(ggplot2) # For creating visuals and plots library(dplyr) # For working with the data library(readr) # For importing csv data files Introduction and Motivation We have many ways of writing down and understanding dates in English.</description>
+      <description>Introduction and Motivation Converting to Objects of Class “Date”  Lubridate  Inconvenient or Uncommon Cases   Operations with Dates Using Dates to Manipulate Datasets  Tracking Values with Respect to Time Linear Regression Using Time Data  Conclusion References:   ## You&amp;#39;ll need to have the following packages installed and loaded: library(lubridate) # For dealing with dates library(ggplot2) # For creating visuals and plots library(dplyr) # For working with the data library(readr) # For importing csv data files Introduction and Motivation We have many ways of writing down and understanding dates in English.</description>
     </item>
     
   </channel>

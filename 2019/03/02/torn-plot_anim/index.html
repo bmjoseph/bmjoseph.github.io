@@ -70,6 +70,7 @@
 
     <div class="article-content">
       
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p>I recently thought about the possibility of making art by combining different plots into a gif. I thought back to my time in Oklahoma last summer and experimented with plotting a tornado. Here’s what I came up with. I made the attempt on the left, then the middle, and then finally, the right.</p>
@@ -85,7 +86,7 @@
 </li>
 <li>I wanted the top to be less predictable.</li>
 </ol>
-<p>With those together, I decided to plot confidence intervals on randomly generated binomial distributions, each with the same p, but different n. These are not actually valid confidence intervals for small n, but that’s okay.</p>
+<p>With those together, I decided to plot confidence intervals on randomly generated binomial distributions, each with the same p, but different n. These are not actually valid confidence intervals for small n, but that’s okay.</p>
 <p>My implementation is in the source of this document, but the code is ugly and not well documented, so I won’t include it here. You can find it on my Github if you’re interested.</p>
 <p>By the way, if you want to make your own plot gifs, I recommend the gif maker at <a href="https://gifmaker.me/">this website</a>. I used that for each gif in this post. (I tried to use gganimate, but the installation didn’t work on my computer. I’ll definitely go back and figure it out later, but at the time I just wanted to test the visualization as soon as possible.) The final draft gif has a gap of 150ms between frames, unfortunately I’m not sure about the others.</p>
 

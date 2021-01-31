@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.53" />
+
+
+<title>Playing Around with The Office Script - Blog_Name</title>
+<meta property="og:title" content="Playing Around with The Office Script - Blog_Name">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/bmjoseph">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/baileymjoseph/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Playing Around with The Office Script</h1>
+
+    
+    <span class="article-date">2020/04/04</span>
+    
+
+    <div class="article-content">
+      
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>file_path &lt;- &quot;../../static/data/office&quot; 
+
+theme_clean &lt;- function() {
+  theme_bw(base_size = 11) +
+    theme(text = element_text(family = &quot;Roboto&quot;),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          panel.background = element_rect(colour = &quot;#E1E1E1&quot;),
+          panel.border = element_blank())
+}
+
+library(scales)
+library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     date</code></pre>
+<pre class="r"><code>library(readr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;readr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:scales&#39;:
+## 
+##     col_factor</code></pre>
+<pre class="r"><code>library(glue)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:glue&#39;:
+## 
+##     collapse</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
+## 
+##     intersect, setdiff, union</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(stringr)</code></pre>
+<pre class="r"><code># Read in the data
+script &lt;- read_csv(glue(&quot;{file_path}/office_script.csv&quot;))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   id = col_double(),
+##   season = col_double(),
+##   episode = col_double(),
+##   scene = col_double(),
+##   line_text = col_character(),
+##   speaker = col_character(),
+##   deleted = col_logical()
+## )</code></pre>
+<pre class="r"><code># Remove things in brackets, they&#39;re not spoken words
+script &lt;- script %&gt;%
+  mutate(line_text = gsub(&quot;\\[.*?\\]&quot;, &quot;&quot;, line_text)) %&gt;%
+  # Remove the deleted scenes
+  filter(!deleted) %&gt;%
+  select(-deleted)</code></pre>
+<pre class="r"><code># Fix some inconsistencies in the names
+script &lt;- script %&gt;%
+  mutate(speaker = case_when(speaker == &quot;David&quot; ~ &quot;David Wallace&quot;,
+                             speaker == &quot;Deangelo&quot; ~ &quot;DeAngelo&quot;,
+                             speaker == &quot;Ryan Howard&quot; ~ &quot;Ryan&quot;,
+                             speaker == &quot;Robert&quot; ~ &quot;Robert California&quot;,
+                             speaker == &quot;Darly&quot; ~ &quot;Darryl&quot;,
+                             speaker == &quot;Bob&quot; ~ &quot;Bob Vance&quot;,
+                             speaker %in% c(&quot;Michel&quot;, &quot;Micahel&quot;, &quot;Michae&quot;,
+                                            &quot;Michael [on phone]&quot;, &quot;M ichael&quot;,
+                                            &quot;Micael&quot;, &quot;MIchael&quot;, &quot;Michal&quot;, &quot;Mihael&quot;, &quot;Miichael&quot; ) ~ &quot;Michael&quot;,
+                             T ~ speaker))
+
+remove_text_punc &lt;- function(string) {
+  string %&gt;% str_replace_all(pattern = &quot;[\n-]+|\\s+&quot;,
+                      replacement = &quot; &quot;) %&gt;%
+      str_replace_all(pattern = &quot;[\\.,!/?():]&quot;,
+                      replacement = &quot;&quot;) %&gt;%
+      tolower()
+}
+
+
+
+# Add on speaker group, for merging later
+script &lt;- script %&gt;%
+  mutate(unique_speaker_order = cumsum(c(TRUE, speaker[-1] != speaker[-length(speaker)])))
+
+
+# Make a somewhat degenerate data frame, but that has the 
+# lines someone says without someone else interrupring 
+# All considered to be the same line
+
+script_grouped_lines &lt;- aggregate(line_text ~ speaker + unique_speaker_order, transform(script, 
+    unique_speaker_order = cumsum(c(TRUE, speaker[-1] != speaker[-length(speaker)]))), 
+           FUN = paste, collapse= &quot; &quot;)
+
+# Merge to collapse rows of the same speaker
+script &lt;- script %&gt;%
+  select(-line_text, - speaker) %&gt;%
+  group_by(unique_speaker_order) %&gt;%
+    slice(1) %&gt;%
+  ungroup() %&gt;%
+  merge(script_grouped_lines %&gt;%
+          select(speaker, line_text, unique_speaker_order),
+        by = &quot;unique_speaker_order&quot;) %&gt;%
+  select(-unique_speaker_order)
+
+# Remove punctuation, make things lowercase
+script &lt;- script %&gt;%
+  mutate(line_text = remove_text_punc(line_text))
+
+# Add in the number of words per line
+
+script &lt;- script %&gt;% 
+  mutate(nwords = str_count(line_text, &quot; &quot;) + 1)</code></pre>
+<pre class="r"><code>script %&gt;% 
+  filter(is.na(nwords))</code></pre>
+<pre><code>## [1] id        season    episode   scene     speaker   line_text nwords   
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<p>Once we’ve read in and cleaned the data, we’re ready to look at the number of lines per character:</p>
+<pre class="r"><code>speaker_line_ranking &lt;- script %&gt;%
+  group_by(speaker) %&gt;%
+  summarize(n_lines = sum(nwords)) %&gt;%
+  arrange(-n_lines) %&gt;%
+  filter(n_lines &gt; 1000) %&gt;%
+  ungroup() %&gt;%
+  pull(speaker)
+
+script %&gt;%
+  group_by(speaker) %&gt;%
+  summarize(n_lines = sum(nwords)) %&gt;%
+  mutate(more_than_100 = n_lines &gt; 1000,
+         speaker_adj = ifelse(more_than_100, speaker, &quot;Other&quot;)) %&gt;%
+  ungroup() %&gt;%
+  group_by(speaker_adj) %&gt;%
+  summarize(n_lines = sum(n_lines)) %&gt;%
+  arrange(-n_lines) %&gt;%
+  mutate(speaker = factor(speaker_adj, levels = c(speaker_line_ranking, &quot;Other&quot;))) %&gt;%
+  ggplot(aes(x = speaker, y = n_lines)) +
+    geom_bar(stat = &quot;identity&quot;) +
+    labs(title = &quot;Total Lines by Character&quot;,
+         x = &quot;Speaker&quot;,
+         y = &quot;Number of Lines&quot;) +
+    theme_clean() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="/post/2020-04-04-playing-around-with-the-office-script_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

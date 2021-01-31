@@ -70,15 +70,18 @@
 
     <div class="article-content">
       
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 <div id="TOC">
 <ul>
 <li><a href="#introduction-and-motivation">Introduction and Motivation</a></li>
-<li><a href="#reading-web-data-into-r">Reading Web Data into R</a><ul>
+<li><a href="#reading-web-data-into-r">Reading Web Data into R</a>
+<ul>
 <li><a href="#background-about-html">Background About HTML</a></li>
 <li><a href="#using-the-package-rvest">Using the Package Rvest</a></li>
 </ul></li>
-<li><a href="#song-lyric-analysis">Song Lyric Analysis</a><ul>
+<li><a href="#song-lyric-analysis">Song Lyric Analysis</a>
+<ul>
 <li><a href="#data-cleaning-with-stringr">Data Cleaning with Stringr</a></li>
 <li><a href="#scraping-and-cleaning-more-lyrics-for-analysis">Scraping and Cleaning More Lyrics for Analysis</a></li>
 <li><a href="#analysis-of-repetition">Analysis of Repetition</a></li>
@@ -143,7 +146,7 @@ str(all_too_well)</code></pre>
 <p><img src="/images/web_scrape_guide/img1.png" width="80%" /></p>
 <p>Take special notice of the part that I added a red circle to in upper center part of the picture. That’s a selector tool which will allow you to find your desired HTML tags without first becoming an HTML coding wizard. Click on that tool and then interactively move your cursor around the left part of the screen (without clicking) until the text you want is highlighted. Click once and notice the change on the right hand side. If you do this step correctly and highlight only the lyrics, you should see this line highlighted on the right side of the page:</p>
 <p><img src="/images/web_scrape_guide/highlighted_tag.png" width="80%" /></p>
-<p>The text is partitioned off in a <code>&lt;div&gt;</code> tag, which means it’s divided from other parts. Looking at the lines above and below the highlighted one though, you’ll see it’s not the only <code>&lt;div&gt;</code> tag. Luckily, the people who set up the page included an ID for this particular tag, which you can see in <code>&lt;div id=&quot;lyrics&quot;&gt;</code>.</p>
+<p>The text is partitioned off in a <code>&lt;div&gt;</code> tag, which means it’s divided from other parts. Looking at the lines above and below the highlighted one though, you’ll see it’s not the only <code>&lt;div&gt;</code> tag. Luckily, the people who set up the page included an ID for this particular tag, which you can see in <code>&lt;div id="lyrics"&gt;</code>.</p>
 <p>We can use the <code>html_nodes()</code> function to capture only the part of the web data contained within this particular tag. This function requires two arguments: the output of a call to <code>read_html()</code> and the id of our desired tag, set off with quotes and a hash symbol. The hash does <strong>not</strong> appear in the id listed on the site, so be careful not to forget it.</p>
 <pre class="r"><code>all_too_well_node &lt;- html_nodes(all_too_well, &quot;#lyrics&quot;)
 all_too_well_node</code></pre>
@@ -521,7 +524,7 @@ wordcloud(lyric_corpus,
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.6.2 (2019-12-12)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS Mojave 10.14.5
+## Running under: macOS Mojave 10.14.6
 ## 
 ## Matrix products: default
 ## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
