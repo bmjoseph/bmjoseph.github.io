@@ -59,7 +59,7 @@
 
   <article class="article">
     
-    <span class="article-duration">3 min read</span>
+    <span class="article-duration">4 min read</span>
     
 
     <h1 class="article-title">Playing Around with The Office Script</h1>
@@ -73,6 +73,7 @@
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
+<p>This post will be a little bit different from most, in that I’m going to show all of my code.</p>
 <pre class="r"><code>file_path &lt;- &quot;../../static/data/office&quot; 
 
 theme_clean &lt;- function() {
@@ -86,49 +87,16 @@ theme_clean &lt;- function() {
 }
 
 library(scales)
-library(lubridate)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;lubridate&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:base&#39;:
-## 
-##     date</code></pre>
-<pre class="r"><code>library(readr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;readr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:scales&#39;:
-## 
-##     col_factor</code></pre>
-<pre class="r"><code>library(glue)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:glue&#39;:
-## 
-##     collapse</code></pre>
-<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
-## 
-##     intersect, setdiff, union</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(ggplot2)
+library(lubridate)
+library(readr)
+library(glue)
+library(dplyr)
+library(ggplot2)
 library(stringr)</code></pre>
 <pre class="r"><code># Read in the data
-script &lt;- read_csv(glue(&quot;{file_path}/office_script.csv&quot;))</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   id = col_double(),
-##   season = col_double(),
-##   episode = col_double(),
-##   scene = col_double(),
-##   line_text = col_character(),
-##   speaker = col_character(),
-##   deleted = col_logical()
-## )</code></pre>
-<pre class="r"><code># Remove things in brackets, they&#39;re not spoken words
+script &lt;- read_csv(glue(&quot;{file_path}/office_script.csv&quot;))
+
+# Remove things in brackets, they&#39;re not spoken words
 script &lt;- script %&gt;%
   mutate(line_text = gsub(&quot;\\[.*?\\]&quot;, &quot;&quot;, line_text)) %&gt;%
   # Remove the deleted scenes
@@ -219,7 +187,39 @@ script %&gt;%
          y = &quot;Number of Lines&quot;) +
     theme_clean() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="/post/2020-04-04-playing-around-with-the-office-script_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/2020-04-04-playing-around-with-the-office-script_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Great, let’s look at how the top 12 characters’ (through Kelly on the graph above) prominence changed as the seasons went on. I’m going to show this two ways, once where every character gets their own scale, so that you can easily see changes in that character, and once where every character is on the same scale, so that it’s easier to see the relative proportions.</p>
+<pre class="r"><code># Season Level proportion of lines by character
+season_line_counts &lt;- script %&gt;%
+  group_by(season) %&gt;%
+  summarize(season_lines = n()) %&gt;%
+  merge(data.frame(speaker = speaker_line_ranking[1:12]))
+
+
+prevelance_by_season_plot &lt;- script %&gt;%
+  filter(speaker %in% speaker_line_ranking[1:12]) %&gt;%
+  group_by(speaker, season) %&gt;%
+  summarize(n_lines = n()) %&gt;%
+  merge(season_line_counts, by = c(&quot;season&quot;, &quot;speaker&quot;), all.y = T) %&gt;%
+  mutate(n_lines = ifelse(is.na(n_lines), 0, n_lines)) %&gt;%
+  mutate(season_prop = n_lines/season_lines,
+         speaker = factor(speaker, levels = speaker_line_ranking)) %&gt;%
+  ggplot(aes(x = season, y = season_prop)) +
+    geom_point() +
+    geom_line() +
+    scale_x_continuous(breaks = 1:9) +
+    labs(title = &quot;Character Importance by Line Frequency over Time&quot;,
+         x = &quot;Season&quot;, y = &quot;Proportion of Lines&quot;) +
+    theme_clean()
+
+prevelance_by_season_plot +
+  facet_wrap(~speaker, scale= &quot;free&quot;) </code></pre>
+<p><img src="/post/2020-04-04-playing-around-with-the-office-script_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>prevelance_by_season_plot +
+  facet_wrap(~speaker) </code></pre>
+<p><img src="/post/2020-04-04-playing-around-with-the-office-script_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Michael’s plot looks the same either way, but the second version makes it clear just how much he carried the early seasons of the show. Together, these plots show a kind of rise of most of the minor characters as the show moved away from, and eventually left out, Michael.</p>
+<p>I’ll have to come back to this, there’s a lot more we can do with the script.</p>
 
     </div>
   </article>
